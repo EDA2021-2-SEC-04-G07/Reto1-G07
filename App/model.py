@@ -37,9 +37,47 @@ los mismos.
 
 # Construccion de modelos
 
+def crearCatalogo():
+    """
+    
+    """
+    catalogo = {'artistas': None,
+                'obras': None,}
+
+    catalogo['artistas'] = lt.newList('SINGLE_LINKED')
+    catalogo['obras'] = lt.newList('SINGLE_LINKED')
+
+    return catalogo
+
+
 # Funciones para agregar informacion al catalogo
 
+def agregarArtista(catalogo, pArtista):
+    cadArtista=pArtista.split(",")
+    artista=nuevoArtista(cadArtista[1],cadArtista[5],cadArtista[3])
+    lt.addLast(catalogo['artistas'], artista)
+
+def agregarObra(catalogo, pObra):
+    cadObra=pObra.split(",")
+    obra=nuevaObra(cadObra[1],cadObra[3],cadObra[4])
+    lt.addLast(catalogo['obras'], obra)
+
 # Funciones para creacion de datos
+
+def nuevoArtista(nombre, fecha, nacionalidad):
+    artista={'nombre':"",'fecha':"",'nacionalidad':"","obras": None}
+    artista['nombre']=nombre
+    artista['fecha']=fecha
+    artista['nacionalidad']=nacionalidad
+    artista['obras']=lt.newList('ARRAY_LIST')
+    return artista
+
+def nuevaObra(titulo, fecha, tecnica):
+    obra={'titulo':"",'fecha':"",'tecnica':""}
+    obra['titulo']=titulo
+    obra['fecha']=fecha
+    obra['tecnica']=tecnica
+    return obra
 
 # Funciones de consulta
 
