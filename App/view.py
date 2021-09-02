@@ -42,7 +42,19 @@ def printMenu():
     print("4- Clasificar las obras de un artista por técnica")
     print("5- Clasificar las obras por la nacionalidad de sus creadores")
 
-catalog = None
+catalogo = None
+
+def initCatalogo():
+    """
+    Inicializa el catalogo del modelo
+    """
+    return controller.initCatalogo()
+
+def cargarDatos(catalogo):
+    """
+    Carga las obras y los artistas en la estructura de datos
+    """
+    controller.cargarDatos(catalogo)
 
 """
 Menu principal
@@ -52,6 +64,8 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        catalogo = controller.initCatalogo()
+        cargarDatos(catalogo)
 
     elif int(inputs[0]) == 2:
         print("Creando lista ....")
