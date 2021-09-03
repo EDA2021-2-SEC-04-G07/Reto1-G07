@@ -20,9 +20,9 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-import config as cf
+from DISClib.ADT import config as cf
 import sys
-import controller
+from App import controller
 from DISClib.ADT import list as lt
 assert cf
 
