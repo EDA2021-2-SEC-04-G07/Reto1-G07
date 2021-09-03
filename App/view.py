@@ -20,7 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-from DISClib.ADT import config as cf
+import config as cf
 import sys
 from App import controller
 from DISClib.ADT import list as lt
