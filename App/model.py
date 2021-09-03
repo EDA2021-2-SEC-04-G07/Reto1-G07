@@ -52,14 +52,12 @@ def crearCatalogo():
 
 # Funciones para agregar informacion al catalogo
 
-def agregarArtista(catalogo, pArtista):
-    cadArtista=pArtista.split(",")
-    artista=nuevoArtista(cadArtista[1],cadArtista[5],cadArtista[3])
+def agregarArtista(catalogo, artista):
+    artista=nuevoArtista(artista[''],artista[''],artista[''])
     lt.addLast(catalogo['artistas'], artista)
 
-def agregarObra(catalogo, pObra):
-    cadObra=pObra.split(",")
-    obra=nuevaObra(cadObra[1],cadObra[3],cadObra[4])
+def agregarObra(catalogo, obra):
+    obra=nuevaObra(obra[''],obra[''],obra[''])
     lt.addLast(catalogo['obras'], obra)
 
 # Funciones para creacion de datos
