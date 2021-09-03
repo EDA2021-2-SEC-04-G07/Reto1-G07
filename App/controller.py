@@ -20,8 +20,8 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-import config as cf
-import model
+from DISClib.ADT import config as cf
+from App import model
 import csv
 
 
