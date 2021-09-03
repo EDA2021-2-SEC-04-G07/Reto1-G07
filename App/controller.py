@@ -45,7 +45,7 @@ def cargarDatos(catalogo):
     cargarObras(catalogo)
 
 def cargarArtistas(catalogo):
-    archivoArtistas=cf.data_dir + 'Artists-utf8-small'
+    archivoArtistas=cf.data_dir + 'Artists-utf8-small.csv'
     input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
     for artista in input_file:
         model.agregarArtista(catalogo, artista)
