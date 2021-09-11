@@ -26,6 +26,10 @@
 
 
 import config as cf
+from DISClib.Algorithms.Sorting import insertionsort as ist
+from DISClib.Algorithms.Sorting import mergesort as mst
+from DISClib.Algorithms.Sorting import quicksort as qst
+from DISClib.Algorithms.Sorting import shellsort as sst
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
@@ -37,15 +41,15 @@ los mismos.
 
 # Construccion de modelos
 
-def crearCatalogo():
+def crearCatalogo(tipo_lista):
     """
     
     """
     catalogo = {'artistas': None,
                 'obras': None,}
 
-    catalogo['artistas'] = lt.newList('SINGLE_LINKED')
-    catalogo['obras'] = lt.newList('SINGLE_LINKED')
+    catalogo['artistas'] = lt.newList(tipo_lista)
+    catalogo['obras'] = lt.newList(tipo_lista)
 
     return catalogo
 
@@ -83,4 +87,27 @@ def nuevaObra(titulo, fecha, tecnica):
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
+def cmpArtworkByDateAcquired(artwork1, artwork2):
+    
+    if artwork1['DateAcquired'] < artwork2['DateAcquired']:
+        return True
+    else:
+        return False
+
 # Funciones de ordenamiento
+
+def insertion(datos, cmpfunction = cmpArtworkByDateAcquired()):
+    lista_ordenada = ist.sort(datos, cmpfunction)
+    return lista_ordenada
+
+def shell(datos, cmpfunction):
+    lista_ordenada = sst.sort(datos, cmpfunction)
+    return lista_ordenada
+
+def merge(datos, cmpfunction):
+    lista_ordenada = mst.sort(datos, cmpfunction)
+    return lista_ordenada
+
+def quicksort(datos, lo, hi, cmpfunction):
+    lista_ordenada = qst.quicksort(datos, lo, hi, cmpfunction)
+    return lista_ordenada

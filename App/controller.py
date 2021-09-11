@@ -31,11 +31,11 @@ El controlador se encarga de mediar entre la vista y el modelo.
 
 # Inicialización del Catálogo 
 
-def initCatalogo():
+def initCatalogo(tipo_lista):
     """
     Llama la funcion de inicializacion del catalogo del modelo.
     """
-    catalogo = model.crearCatalogo()
+    catalogo = model.crearCatalogo(tipo_lista)
     return catalogo
 
 # Funciones para la carga de datos
@@ -57,5 +57,21 @@ def cargarObras(catalogo):
         model.agregarObra(catalogo, obra)
 
 # Funciones de ordenamiento
+
+def llamarInsertion(datos):
+    lista_ordenada = model.insertion(datos)
+    return lista_ordenada
+
+def llamarShell(datos):
+    lista_ordenada = model.shell(datos)
+    return lista_ordenada
+
+def llamarMerge(datos):
+    lista_ordenada = model.merge(datos)
+    return lista_ordenada
+
+def llamarQuicksort(datos):
+    lista_ordenada = model.quicksort(datos)
+    return lista_ordenada
 
 # Funciones de consulta sobre el catálogo

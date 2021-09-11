@@ -63,8 +63,18 @@ while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
+        print("1- ARRAY_LIST")
+        print("2- LINKED_LIST")
+        seleccion_tipo_lista = int(input("Seleccione el tipo de lista: "))
+        
+        if seleccion_tipo_lista == 1:
+            tipo_lista = 'ARRAY_LIST'
+            
+        elif seleccion_tipo_lista == 2:
+            tipo_lista = 'LINKED_LIST'
+            
         print("Cargando información de los archivos ....")
-        catalogo = controller.initCatalogo()
+        catalogo = controller.initCatalogo(tipo_lista)
         cargarDatos(catalogo)
 
     elif int(inputs[0]) == 2:
@@ -72,8 +82,26 @@ while True:
         pass
     
     elif int(inputs[0]) == 3:
+        tamanho_muestra = int(input('Escriba el tamaño de la muestra que quiere analizar: '))
+        datos = lt.subList(catalogo, 0, tamanho_muestra)
+        
+        print('1- Insertion')
+        print('2- Shell')
+        print('3- Merge')
+        print('4- Quick Sorts')
+        seleccion_tipo_ordenamiento = int(input('Seleccione un tipo de algoritmo de ordenamiento'))
+        
+        if seleccion_tipo_ordenamiento == 1:
+            lista_ordenada = controller.llamarInsertion(datos)
+        elif seleccion_tipo_ordenamiento == 2:
+            lista_ordenada = controller.llamarShell(datos)
+        elif seleccion_tipo_ordenamiento == 3:
+            lista_ordenada = controller.llamarMerge(datos)
+        elif seleccion_tipo_ordenamiento == 4:
+            lista_ordenada = controller.llamarQuicksort(datos)                               
+    
         print("Creando lista ....")
-        pass
+        
     
     elif int(inputs[0]) == 4:
         print("Clasificando ...")
