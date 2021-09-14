@@ -83,7 +83,8 @@ while True:
     
     elif int(inputs[0]) == 3:
         tamanho_muestra = int(input('Escriba el tamaño de la muestra que quiere analizar: '))
-        datos = lt.subList(catalogo, 0, tamanho_muestra)
+        datos = lt.subList(catalogo, 1, tamanho_muestra)
+        datos = datos.copy()
         
         print('1- Insertion')
         print('2- Shell')
@@ -92,15 +93,17 @@ while True:
         seleccion_tipo_ordenamiento = int(input('Seleccione un tipo de algoritmo de ordenamiento'))
         
         if seleccion_tipo_ordenamiento == 1:
-            lista_ordenada = controller.llamarInsertion(datos)
+            resultado = controller.llamarInsertion(datos)
         elif seleccion_tipo_ordenamiento == 2:
-            lista_ordenada = controller.llamarShell(datos)
+            resultado = controller.llamarShell(datos)
         elif seleccion_tipo_ordenamiento == 3:
-            lista_ordenada = controller.llamarMerge(datos)
+            resultado = controller.llamarMerge(datos)
         elif seleccion_tipo_ordenamiento == 4:
-            lista_ordenada = controller.llamarQuicksort(datos)                               
-    
+            resultado = controller.llamarQuicksort(datos)   
+        
         print("Creando lista ....")
+        print(resultado[1])   
+        print("Para la muestra de", tamanho_muestra, " elementos, el tiempo (mseg) es: ", str(resultado[0]))   
         
     
     elif int(inputs[0]) == 4:

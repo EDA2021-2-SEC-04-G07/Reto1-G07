@@ -46,11 +46,11 @@ def cargarDatos(catalogo):
 
 def cargarArtistas(catalogo):
     archivoArtistas=cf.data_dir + 'Artists-utf8-small.csv'
-    archivoArtistas='D:\Descargas\Repositorio GitHub\Reto1-G07\Data\Artists-utf8-small.csv'
+    #archivoArtistas='D:\Descargas\Repositorio GitHub\Reto1-G07\Data\Artists-utf8-small.csv'
     input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
     for artista in input_file:
         print(artista)
-        #model.agregarArtista(catalogo, artista)
+        model.agregarArtista(catalogo, artista)
         
         
     
@@ -64,19 +64,19 @@ def cargarObras(catalogo):
 # Funciones de ordenamiento
 
 def llamarInsertion(datos):
-    lista_ordenada = model.insertion(datos)
-    return lista_ordenada
+    resultado = model.insertion(datos)
+    return resultado
 
 def llamarShell(datos):
-    lista_ordenada = model.shell(datos)
-    return lista_ordenada
+    resultado = model.shell(datos)
+    return resultado
 
 def llamarMerge(datos):
-    lista_ordenada = model.merge(datos)
-    return lista_ordenada
+    resultado = model.merge(datos)
+    return resultado
 
 def llamarQuicksort(datos):
-    lista_ordenada = model.quicksort(datos)
-    return lista_ordenada
+    resultado = model.quicksort(datos)
+    return resultado
 
 # Funciones de consulta sobre el catálogo

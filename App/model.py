@@ -26,6 +26,7 @@
 
 
 import config as cf
+import time
 from DISClib.Algorithms.Sorting import insertionsort as ist
 from DISClib.Algorithms.Sorting import mergesort as mst
 from DISClib.Algorithms.Sorting import quicksort as qst
@@ -94,18 +95,34 @@ def cmpArtworkByDateAcquired(artwork1, artwork2):
 
 # Funciones de ordenamiento
 
-def insertion(datos, cmpfunction = cmpArtworkByDateAcquired()):
-    lista_ordenada = ist.sort(datos, cmpfunction)
-    return lista_ordenada
+def insertion(datos): 
+    tiempo_inicial = time.process_time()
+    lista_ordenada = ist.sort(datos, cmpArtworkByDateAcquired)
+    tiempo_final = time.process_time()
+    duracion = (tiempo_final - tiempo_inicial)*1000
+    
+    return duracion, lista_ordenada
 
-def shell(datos, cmpfunction):
-    lista_ordenada = sst.sort(datos, cmpfunction)
-    return lista_ordenada
+def shell(datos):   
+    tiempo_inicial = time.process_time()
+    lista_ordenada = sst.sort(datos, cmpArtworkByDateAcquired)
+    tiempo_final = time.process_time()
+    duracion = (tiempo_final - tiempo_inicial)*1000
+    
+    return duracion, lista_ordenada
 
-def merge(datos, cmpfunction):
-    lista_ordenada = mst.sort(datos, cmpfunction)
-    return lista_ordenada
+def merge(datos):
+    tiempo_inicial = time.process_time()
+    lista_ordenada = mst.sort(datos, cmpArtworkByDateAcquired)
+    tiempo_final = time.process_time()
+    duracion = (tiempo_final - tiempo_inicial)*1000
+    
+    return duracion, lista_ordenada
 
-def quicksort(datos, lo, hi, cmpfunction):
-    lista_ordenada = qst.quicksort(datos, lo, hi, cmpfunction)
-    return lista_ordenada
+def quicksort(datos):
+    tiempo_inicial = time.process_time()
+    lista_ordenada = qst.sort(datos, cmpArtworkByDateAcquired)
+    tiempo_final = time.process_time()
+    duracion = (tiempo_final - tiempo_inicial)*1000
+    
+    return duracion, lista_ordenada
