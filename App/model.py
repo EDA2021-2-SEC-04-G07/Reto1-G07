@@ -109,7 +109,7 @@ def insertion(datos):
     tiempo_inicial = time.process_time()
     lista_ordenada = ist.sort(datos, cmpArtworkByDateAcquired)
     tiempo_final = time.process_time()
-    duracion = (tiempo_final - tiempo_inicial)*1000
+    duracion = (tiempo_final - tiempo_inicial)
     
     return duracion, lista_ordenada
 
@@ -117,7 +117,7 @@ def shell(datos):
     tiempo_inicial = time.process_time()
     lista_ordenada = sst.sort(datos, cmpArtworkByDateAcquired)
     tiempo_final = time.process_time()
-    duracion = (tiempo_final - tiempo_inicial)*1000
+    duracion = (tiempo_final - tiempo_inicial)
     
     return duracion, lista_ordenada
 
@@ -125,7 +125,7 @@ def merge(datos):
     tiempo_inicial = time.process_time()
     lista_ordenada = mst.sort(datos, cmpArtworkByDateAcquired)
     tiempo_final = time.process_time()
-    duracion = (tiempo_final - tiempo_inicial)*1000
+    duracion = (tiempo_final - tiempo_inicial)
     
     return duracion, lista_ordenada
 
@@ -133,6 +133,6 @@ def quicksort(datos):
     tiempo_inicial = time.process_time()
     lista_ordenada = qst.sort(datos, cmpArtworkByDateAcquired)
     tiempo_final = time.process_time()
-    duracion = (tiempo_final - tiempo_inicial)*1000
+    duracion = (tiempo_final - tiempo_inicial)
     
     return duracion, lista_ordenada

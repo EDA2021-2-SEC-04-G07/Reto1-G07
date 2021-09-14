@@ -76,7 +76,7 @@ while True:
         print("Cargando información de los archivos ....")
         catalogo = controller.initCatalogo(tipo_lista)
         cargarDatos(catalogo)
-        print(catalogo)
+        
 
     elif int(inputs[0]) == 2:
         print("Creando lista ....")
