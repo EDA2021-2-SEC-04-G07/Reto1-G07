@@ -76,6 +76,7 @@ while True:
         print("Cargando información de los archivos ....")
         catalogo = controller.initCatalogo(tipo_lista)
         cargarDatos(catalogo)
+        print(catalogo)
 
     elif int(inputs[0]) == 2:
         print("Creando lista ....")
@@ -83,7 +84,7 @@ while True:
     
     elif int(inputs[0]) == 3:
         tamanho_muestra = int(input('Escriba el tamaño de la muestra que quiere analizar: '))
-        datos = lt.subList(catalogo, 1, tamanho_muestra)
+        datos = lt.subList(catalogo['obras'], 1, tamanho_muestra)
         datos = datos.copy()
         
         print('1- Insertion')

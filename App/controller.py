@@ -49,7 +49,7 @@ def cargarArtistas(catalogo):
     #archivoArtistas='D:\Descargas\Repositorio GitHub\Reto1-G07\Data\Artists-utf8-small.csv'
     input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
     for artista in input_file:
-        print(artista)
+        #print(artista)
         model.agregarArtista(catalogo, artista)
         
         

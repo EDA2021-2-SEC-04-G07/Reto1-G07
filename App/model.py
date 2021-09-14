@@ -58,28 +58,38 @@ def crearCatalogo(tipo_lista):
 # Funciones para agregar informacion al catalogo
 
 def agregarArtista(catalogo, artista):
-    artista=nuevoArtista(artista[''],artista[''],artista[''])
+    artista = nuevoArtista(artista['ConstituentID'],artista['DisplayName'],artista['BeginDate'],artista['EndDate'],artista['Nationality'])
     lt.addLast(catalogo['artistas'], artista)
 
 def agregarObra(catalogo, obra):
-    obra=nuevaObra(obra[''],obra[''],obra[''])
+    obra=nuevaObra(obra['ConstituentID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'])
     lt.addLast(catalogo['obras'], obra)
 
 # Funciones para creacion de datos
 
-def nuevoArtista(nombre, fecha, nacionalidad):
-    artista={'nombre':"",'fecha':"",'nacionalidad':"","obras": None}
+def nuevoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad):
+    artista={'id':"", 'nombre':"", 'fecha_nacimiento':"", 'fecha_muerte':"", 'nacionalidad':""}
+    artista['id'] = id
     artista['nombre']=nombre
-    artista['fecha']=fecha
+    artista['fecha_nacimiento'] = fecha_nacimiento
+    artista['fecha_muerte'] = fecha_muerte
     artista['nacionalidad']=nacionalidad
-    artista['obras']=lt.newList('ARRAY_LIST')
+    #artista['obras']=lt.newList('ARRAY_LIST')
     return artista
 
-def nuevaObra(titulo, fecha, tecnica):
-    obra={'titulo':"",'fecha':"",'tecnica':""}
+def nuevaObra(id, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso):
+    
+    obra={'id':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':""}
+    obra['id']=id
     obra['titulo']=titulo
     obra['fecha']=fecha
     obra['tecnica']=tecnica
+    obra['departamento']=departamento
+    obra['fecha_adquisicion']=fecha_adquisicion
+    obra['altura']=altura
+    obra['ancho']=ancho
+    obra['peso']=peso
+    
     return obra
 
 # Funciones de consulta
@@ -88,7 +98,7 @@ def nuevaObra(titulo, fecha, tecnica):
 
 def cmpArtworkByDateAcquired(artwork1, artwork2):
     
-    if artwork1['DateAcquired'] < artwork2['DateAcquired']:
+    if artwork1['fecha_adquisicion'] < artwork2['fecha_adquisicion']:
         return True
     else:
         return False
