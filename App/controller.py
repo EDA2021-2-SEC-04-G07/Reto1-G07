@@ -99,3 +99,9 @@ def llamarFiltrarObrasPorId(datos, idArtista, tipo_lista):
 
 def llamarOrdenarObras(lista):
     return model.shell(lista)
+
+def llamarListaNacionalidades(datos):
+    return model.listaNacionalidades(datos)
+
+def llamarBuscarObrasPorNacionalidad(datos, nacionalidad):
+    return model.buscarObrasPorNacionalidad(datos, nacionalidad)

@@ -187,8 +187,23 @@ while True:
         
     
     elif int(inputs[0]) == 5:
+
+        datos = catalogo.copy()
         print("Clasificando ...")
-        pass
+        lista = controller.llamarListaNacionalidades(datos)
+        nacionalidad = lista[0][0]
+        lista_obras = controller.llamarBuscarObrasPorNacionalidad(datos, nacionalidad)
+        cont = 0
+        print(f'Las primeras 20 obras de nacionalidad {nacionalidad}')
+        for i in lista_obras['elements']:
+            while cont < 20:
+                print(f'Obra de nacionalidad {nacionalidad}: {i}')
+                print(' ')
+                cont = cont + 1
+        
+        print('La lista de nacionalidades ordenadas por el total de obras de mayor a menor (TOP 10) es :')
+        print(' ')
+        print(lista[0:10])
 
     else:
         sys.exit(0)
