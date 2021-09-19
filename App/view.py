@@ -22,6 +22,7 @@
 
 import config as cf
 import sys
+from os import system
 from datetime import date, time, datetime
 from App import controller
 from DISClib.ADT import list as lt
@@ -38,6 +39,7 @@ operación solicitada
 x = 1
 
 def printMenu():
+    system("cls")
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
     print("2- Lista cronólógica de los artistas")
@@ -79,6 +81,7 @@ while True:
         print("Cargando información de los archivos ....")
         catalogo = controller.initCatalogo(tipo_lista)
         cargarDatos(catalogo)
+        system("cls")
         
 
     elif int(inputs[0]) == 2:
@@ -113,6 +116,9 @@ while True:
             print(i)
             
         print('El tiempo de ejecución fue de: ', tiempo, ' s.')
+
+        input()
+        system("cls")
 
 
     elif int(inputs[0]) == 3:
@@ -156,6 +162,9 @@ while True:
         print(dic1[numero_elementos-2])
         print(dic1[numero_elementos-1])
         print(' ')
+
+        input()
+        system("cls")
         
         #print("Para la muestra de", tamanho_muestra, " elementos, el tiempo (mseg) es: ", str(resultado[0]))   
         
@@ -188,11 +197,32 @@ while True:
         for i in listaFiltradaPorId[0]['elements']:
             print(i)
         
+        input()
+        system("cls")
+        
     
     elif int(inputs[0]) == 5:
+
+        datos = catalogo.copy()
         print("Clasificando ...")
-        pass
+        lista = controller.llamarListaNacionalidades(datos)
+        nacionalidad = lista[0][0]
+        lista_obras = controller.llamarBuscarObrasPorNacionalidad(datos, nacionalidad)
+        cont = 0
+        print(f'Las primeras 20 obras de nacionalidad {nacionalidad}')
+        for i in lista_obras['elements']:
+            while cont < 20:
+                print(f'Obra de nacionalidad {nacionalidad}: {i}')
+                print(' ')
+                cont = cont + 1
+        
+        print('La lista de nacionalidades ordenadas por el total de obras de mayor a menor (TOP 10) es :')
+        print(' ')
+        print(lista[0:10])
+        input()
+        system("cls")
 
     else:
+        system("cls")
         sys.exit(0)
 sys.exit(0)

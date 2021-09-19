@@ -28,6 +28,7 @@
 import config as cf
 import time
 import re
+import operator
 from DISClib.Algorithms.Sorting import insertionsort as ist
 from DISClib.Algorithms.Sorting import mergesort as mst
 from DISClib.Algorithms.Sorting import quicksort as qst
@@ -136,6 +137,83 @@ def consultarId(datos, nombreArtista):
         i += 1
         
     return idArtista     
+    return id  
+
+def buscarObrasPorNacionalidad(datos, nacionalidad):
+    info_obras = datos['obras']['elements']
+
+    lista_obras = lt.newList('ARRAY_LIST')    
+
+    for i in info_obras:
+
+        x=i['id']
+    
+        characters = "[] "
+
+        for s in range(len(characters)):
+            x = x.replace(characters[s],"")
+
+        lista = x.split(',')
+        for j in lista:
+            if consultarNacionalidad(datos, int(j)) == nacionalidad:
+                lt.addLast(lista_obras, i)
+
+    return lista_obras
+
+
+    
+
+def consultarNacionalidad(datos, id):
+
+    info_artistas = datos['artistas']['elements']
+    nacionalidad = ""
+
+    for i in info_artistas:
+        if i['id'] == str(id):
+            nacionalidad = i['nacionalidad']
+            break
+        
+    return nacionalidad 
+
+def listaNacionalidades(datos):
+
+    info_obras = datos['obras']['elements']
+
+    lista_id_artistas = lt.newList('ARRAY_LIST')
+    dic_nacionalidades = {}
+    
+
+    for i in info_obras:
+
+        x=i['id']
+    
+        characters = "[] "
+
+        for s in range(len(characters)):
+            x = x.replace(characters[s],"")
+
+        lista = x.split(',')
+        #print(lista)
+        for a in lista:
+            if lt.isPresent(lista_id_artistas, a) == -1 or a == ' ' or a == '':
+               pass
+            else:
+                lt.addLast(lista_id_artistas, a)
+
+    inf=lista_id_artistas['elements']
+    for i in inf:
+        nacionalidad = consultarNacionalidad(datos, int(i))
+
+        if nacionalidad in dic_nacionalidades:
+            dic_nacionalidades[nacionalidad]=dic_nacionalidades[nacionalidad]+1
+        else:
+            dic_nacionalidades[nacionalidad]=1
+
+    del dic_nacionalidades['']
+
+    nacionalidades_sort = sorted(dic_nacionalidades.items(), key=operator.itemgetter(1), reverse=True)
+    
+    return nacionalidades_sort
 
 def filtrarObrasPorId(datos, idArtista, tipo_lista):
     
