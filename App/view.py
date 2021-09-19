@@ -115,28 +115,16 @@ while True:
 
 
     elif int(inputs[0]) == 3:
-        tamanho_muestra = int(input('Escriba el tamaño de la muestra que quiere analizar: '))
+        #tamanho_muestra = int(input('Escriba el tamaño de la muestra que quiere analizar: '))
         fecha_inicial_texto = input('Escriba la fecha inicial: ')
         fecha_inicial = datetime.strptime(fecha_inicial_texto, '%Y-%m-%d')
         fecha_final_texto = input('Escriba la fecha final: ')
         fecha_final = datetime.strptime(fecha_final_texto, '%Y-%m-%d')
-        datos = lt.subList(catalogo['obras'], 1, tamanho_muestra)
+        datos = lt.subList(catalogo['obras'], 1, len(catalogo['obras']['elements']))
         datos = datos.copy()
+        #print(catalogo['obras'])
         
-        print('1- Insertion')
-        print('2- Shell')
-        print('3- Merge')
-        print('4- Quick Sorts')
-        seleccion_tipo_ordenamiento = int(input('Seleccione un tipo de algoritmo de ordenamiento'))
-        
-        if seleccion_tipo_ordenamiento == 1:
-            resultado = controller.llamarInsertion(datos)
-        elif seleccion_tipo_ordenamiento == 2:
-            resultado = controller.llamarShell(datos)
-        elif seleccion_tipo_ordenamiento == 3:
-            resultado = controller.llamarMerge(datos)
-        elif seleccion_tipo_ordenamiento == 4:
-            resultado = controller.llamarQuicksort(datos)   
+        resultado = controller.llamarQuicksort(datos)   
         
         print("Creando lista ....")   
         dic=resultado[1]
@@ -144,9 +132,12 @@ while True:
         lista_rango=lt.newList('ARRAY_LIST')
         
         for elemento in lista:
-            fecha_elemento=datetime.strptime(elemento['fecha_adquisicion'], '%Y-%m-%d')
-            if fecha_elemento > fecha_inicial and fecha_elemento < fecha_final:
-                lt.addLast(lista_rango, elemento)
+            if elemento['fecha_adquisicion']=='':
+                pass
+            else:
+                fecha_elemento=datetime.strptime(elemento['fecha_adquisicion'], '%Y-%m-%d')
+                if fecha_elemento > fecha_inicial and fecha_elemento < fecha_final:
+                  lt.addLast(lista_rango, elemento)
 
         dic1=lista_rango['elements']
         numero_elementos=len(dic1)
