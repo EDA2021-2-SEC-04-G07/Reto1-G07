@@ -77,3 +77,7 @@ def llamarQuicksort(datos):
     return resultado
 
 # Funciones de consulta sobre el catálogo
+
+def obrasAdquiridasPorCompra(datos):
+    resultado = model.obrasAdquiridasPorCompra(datos)
+    return resultado
