@@ -34,6 +34,8 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
+x = 1
+
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
@@ -79,9 +81,38 @@ while True:
         
 
     elif int(inputs[0]) == 2:
+        
+        anho_inicial = int(input('Digite un año inicial: '))
+        anho_final = int(input('Digite un año final: '))        
+        datos = catalogo.copy()
+        
+        info = controller.llamarArtistas(datos, anho_inicial, anho_final, tipo_lista)
+        info_ordenada = controller.llamarOrdenarArtistasPorNacimiento(info)
+        
+        lista_final = info_ordenada[1]
+        tiempo = info_ordenada[0]
+        
+        #print(info)
+        
+        primeros_3 = lista_final['elements'][:3]
+        ultimos_3 = lista_final['elements'][(len(lista_final['elements'])-2):]
+        primeros_ultimos = primeros_3 + ultimos_3
+        resultado_1 = 'Hay {} artistas nacidos entre {} y {}'.format(len(lista_final['elements']), anho_inicial, anho_final)
+        
         print("Creando lista ....")
-        pass
-    
+        print(resultado_1)
+        print('=========================================================')
+        print('Los primeros y los últimos 3 son: ')
+        print(primeros_ultimos)
+        print('=========================================================')
+        print('La información de los artistas: ')
+        
+        for i in lista_final['elements']:
+            print(i)
+            
+        print('El tiempo de ejecución fue de: ', tiempo, ' s.')
+
+
     elif int(inputs[0]) == 3:
         tamanho_muestra = int(input('Escriba el tamaño de la muestra que quiere analizar: '))
         datos = lt.subList(catalogo['obras'], 1, tamanho_muestra)

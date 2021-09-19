@@ -76,4 +76,13 @@ def llamarQuicksort(datos):
     resultado = model.quicksort(datos)
     return resultado
 
+def llamarOrdenarArtistasPorNacimiento(info):
+    return model.insertion(info)
+
 # Funciones de consulta sobre el catálogo
+
+def llamarArtistas(datos, anho_inicial, anho_final, tipo_lista):
+    return model.compararFechasArtistas(datos, anho_inicial, anho_final, tipo_lista)
+
+def llamarDefinircmpFunction(identificador):
+    model.definircmpFunction(identificador)

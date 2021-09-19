@@ -94,6 +94,20 @@ def nuevaObra(id, titulo, fecha, tecnica, departamento, fecha_adquisicion, altur
 
 # Funciones de consulta
 
+def compararFechasArtistas(datos, anho_inicial, anho_final, tipo_lista):
+    
+    listaArtistas = datos['artistas']['elements']
+    listaInfo = lt.newList(tipo_lista)
+    
+    for i in listaArtistas:
+        
+        if (int(i['fecha_nacimiento']) >= anho_inicial and int(i['fecha_nacimiento']) <= anho_final):
+            lt.addLast(listaInfo, i)
+    
+    return listaInfo
+            
+        
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def cmpArtworkByDateAcquired(artwork1, artwork2):
@@ -102,28 +116,35 @@ def cmpArtworkByDateAcquired(artwork1, artwork2):
         return True
     else:
         return False
+    
+def cmpArtistaPorNacimiento(artista1, artista2):
+    
+    if int(artista1['fecha_nacimiento']) < int(artista2['fecha_nacimiento']):
+        return True
+    else:
+        return False
 
 # Funciones de ordenamiento
 
 def insertion(datos): 
     tiempo_inicial = time.process_time()
-    lista_ordenada = ist.sort(datos, cmpArtworkByDateAcquired)
+    lista_ordenada = ist.sort(datos, cmpArtistaPorNacimiento)
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
     
     return duracion, lista_ordenada
 
-def shell(datos):   
+def shell(datos, cmpFuntion):   
     tiempo_inicial = time.process_time()
-    lista_ordenada = sst.sort(datos, cmpArtworkByDateAcquired)
+    lista_ordenada = sst.sort(datos, cmpFuntion)
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
     
     return duracion, lista_ordenada
 
-def merge(datos):
+def merge(datos, cmpFunction):
     tiempo_inicial = time.process_time()
-    lista_ordenada = mst.sort(datos, cmpArtworkByDateAcquired)
+    lista_ordenada = mst.sort(datos, cmpFunction)
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
     
@@ -136,3 +157,20 @@ def quicksort(datos):
     duracion = (tiempo_final - tiempo_inicial)*1000
     
     return duracion, lista_ordenada
+
+#Otras
+
+#def definircmpFunction(identificador):
+    
+    #if identificador == 1:
+        #cmpFunction = cmpArtworkByDateAcquired
+    
+    #elif identificador == 2:
+     #   cmpFunction = cmpArtistaPorNacimiento
+        
+    #return cmpFunction
+
+
+#cmpFunction = definircmpFunction()
+        
+    
