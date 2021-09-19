@@ -120,6 +120,37 @@ def obrasAdquiridasPorCompra(datos):
     return contador
 
 
+def consultarId(datos, nombreArtista):
+    
+    info = datos['artistas']['elements']
+    idArtista = ""
+    
+    for i in info:
+        if i['nombre'] == nombreArtista:
+            idArtista = i['id']
+            break
+        
+    return id      
+
+def filtrarObrasPorId(datos, idArtista, tipo_lista):
+    
+    info_obras = datos['obras']['elements']
+    obrasDelArtista = lt.newList(tipo_lista)
+    lista_temp_1 = []
+    lista_temp_2 = []
+    mayor = None
+    
+    for i in info_obras:
+        if i['tecnica'] == idArtista:
+            lt.addLast(obrasDelArtista, i)
+            lista_temp_1.append(i['tecnica'])
+        
+        if i['tecnica'] not in lista_temp_2:
+            lista_temp_2.append(i['tecnica'])
+    
+    return obrasDelArtista, lista_temp_1, lista_temp_2
+          
+    
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def cmpArtworkByDateAcquired(artwork1, artwork2):
@@ -135,6 +166,13 @@ def cmpArtistaPorNacimiento(artista1, artista2):
         return True
     else:
         return False
+    
+def cmpObrasPorFecha(obra1, obra2):
+    
+    if int(obra1['fecha']) < int(obra2['fecha']):
+        return True
+    else:
+        return False
 
 # Funciones de ordenamiento
 
@@ -146,9 +184,9 @@ def insertion(datos):
     
     return duracion, lista_ordenada
 
-def shell(datos, cmpFuntion):   
+def shell(datos):   
     tiempo_inicial = time.process_time()
-    lista_ordenada = sst.sort(datos, cmpFuntion)
+    lista_ordenada = sst.sort(datos, cmpObrasPorFecha)
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
     

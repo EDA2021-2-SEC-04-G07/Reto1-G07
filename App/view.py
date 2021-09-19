@@ -168,8 +168,32 @@ while True:
         
     
     elif int(inputs[0]) == 4:
-        print("Clasificando ...")
-        pass
+        
+        datos = catalogo.copy()
+        nombreArtista = input('Escriba el nombre del artista a consultar: ')
+        
+        idArtista = controller.llamarConsultarId(datos, nombreArtista) 
+        print(idArtista)     
+        listaFiltradaPorId = controller.llamarFiltrarObrasPorId(datos, idArtista, tipo_lista)
+        listaOrdenadaDeObras = controller.llamarOrdenarObras(listaFiltradaPorId[0])
+        
+        mayor = 0
+        tecnica_mayor = None
+        
+        for i in listaFiltradaPorId[2]:
+            cuant = listaFiltradaPorId[1].count(i)
+            if cuant > mayor:
+                mayor = cuant
+                tecnica_mayor = i
+                
+        print("Clasificando ...")       
+        print(('{} con MOMA Id {} tiene {} obras a su nombre en el museo.').format(nombreArtista, idArtista, len(listaFiltradaPorId[0])))
+        print(('Existen {} medio/técnicas diferentes en su trabajo.').format(len(listaFiltradaPorId[2])))
+        print('Su técnica más utilizada es {} con {} obras.'.format(tecnica_mayor, mayor))    
+              
+        for i in listaFiltradaPorId[0]:
+            print(i)
+        
     
     elif int(inputs[0]) == 5:
         print("Clasificando ...")
