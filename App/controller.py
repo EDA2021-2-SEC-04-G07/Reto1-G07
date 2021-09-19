@@ -60,32 +60,29 @@ def cargarObras(catalogo):
 
 # Funciones de ordenamiento
 
-def llamarInsertion(datos):
+def llamarInsertion(datos, identificador):
     resultado = model.insertion(datos)
     return resultado
 
-def llamarShell(datos):
+def llamarShell(datos, identificador):
     resultado = model.shell(datos)
     return resultado
 
-def llamarMerge(datos):
+def llamarMerge(datos, identificador):
     resultado = model.merge(datos)
     return resultado
 
-def llamarQuicksort(datos):
+def llamarQuicksort(datos, identificador):
     resultado = model.quicksort(datos)
     return resultado
 
-def llamarOrdenarArtistasPorNacimiento(info):
-    return model.insertion(info)
+#def llamarOrdenarArtistasPorNacimiento(info, cmpFunction):
+ #   return model.insertion(info, cmpFunction)
 
 # Funciones de consulta sobre el catálogo
 
 def llamarArtistas(datos, anho_inicial, anho_final, tipo_lista):
     return model.compararFechasArtistas(datos, anho_inicial, anho_final, tipo_lista)
-
-def llamarDefinircmpFunction(identificador):
-    model.definircmpFunction(identificador)
     
 def obrasAdquiridasPorCompra(datos):
     resultado = model.obrasAdquiridasPorCompra(datos)
@@ -97,5 +94,6 @@ def llamarConsultarId(datos, nombreArtista):
 def llamarFiltrarObrasPorId(datos, idArtista, tipo_lista):
     return model.filtrarObrasPorId(datos, idArtista, tipo_lista)
 
-def llamarOrdenarObras(lista):
-    return model.shell(lista)
+#def llamarOrdenarObras(lista, identificador):
+ 
+#   return model.shell(lista, identificador)
