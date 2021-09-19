@@ -27,6 +27,7 @@
 
 import config as cf
 import time
+import re
 from DISClib.Algorithms.Sorting import insertionsort as ist
 from DISClib.Algorithms.Sorting import mergesort as mst
 from DISClib.Algorithms.Sorting import quicksort as qst
@@ -62,7 +63,7 @@ def agregarArtista(catalogo, artista):
     lt.addLast(catalogo['artistas'], artista)
 
 def agregarObra(catalogo, obra):
-    obra=nuevaObra(obra['ConstituentID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'])
+    obra=nuevaObra(obra['ConstituentID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'])
     lt.addLast(catalogo['obras'], obra)
 
 # Funciones para creacion de datos
@@ -77,9 +78,9 @@ def nuevoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad):
     #artista['obras']=lt.newList('ARRAY_LIST')
     return artista
 
-def nuevaObra(id, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso):
+def nuevaObra(id, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea):
     
-    obra={'id':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':""}
+    obra={'id':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':"", 'linea_adquisicion':""}
     obra['id']=id
     obra['titulo']=titulo
     obra['fecha']=fecha
@@ -89,6 +90,7 @@ def nuevaObra(id, titulo, fecha, tecnica, departamento, fecha_adquisicion, altur
     obra['altura']=altura
     obra['ancho']=ancho
     obra['peso']=peso
+    obra['linea_adquisicion']=linea
     
     return obra
 
@@ -107,6 +109,16 @@ def compararFechasArtistas(datos, anho_inicial, anho_final, tipo_lista):
     return listaInfo
             
         
+def obrasAdquiridasPorCompra(datos):
+    contador=0
+
+    for dato in datos['elements']:
+        frase=dato['linea_adquisicion']
+        if re.search('purchase',frase.lower()):
+            contador=contador + 1
+
+    return contador
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 

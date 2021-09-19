@@ -86,3 +86,6 @@ def llamarArtistas(datos, anho_inicial, anho_final, tipo_lista):
 
 def llamarDefinircmpFunction(identificador):
     model.definircmpFunction(identificador)
+def obrasAdquiridasPorCompra(datos):
+    resultado = model.obrasAdquiridasPorCompra(datos)
+    return resultado

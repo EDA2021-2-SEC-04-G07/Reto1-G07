@@ -22,6 +22,7 @@
 
 import config as cf
 import sys
+from datetime import date, time, datetime
 from App import controller
 from DISClib.ADT import list as lt
 assert cf
@@ -115,6 +116,10 @@ while True:
 
     elif int(inputs[0]) == 3:
         tamanho_muestra = int(input('Escriba el tamaño de la muestra que quiere analizar: '))
+        fecha_inicial_texto = input('Escriba la fecha inicial: ')
+        fecha_inicial = datetime.strptime(fecha_inicial_texto, '%Y-%m-%d')
+        fecha_final_texto = input('Escriba la fecha final: ')
+        fecha_final = datetime.strptime(fecha_final_texto, '%Y-%m-%d')
         datos = lt.subList(catalogo['obras'], 1, tamanho_muestra)
         datos = datos.copy()
         
@@ -133,9 +138,33 @@ while True:
         elif seleccion_tipo_ordenamiento == 4:
             resultado = controller.llamarQuicksort(datos)   
         
-        print("Creando lista ....")
-        print(resultado[1])   
-        print("Para la muestra de", tamanho_muestra, " elementos, el tiempo (mseg) es: ", str(resultado[0]))   
+        print("Creando lista ....")   
+        dic=resultado[1]
+        lista=dic['elements']
+        lista_rango=lt.newList('ARRAY_LIST')
+        
+        for elemento in lista:
+            fecha_elemento=datetime.strptime(elemento['fecha_adquisicion'], '%Y-%m-%d')
+            if fecha_elemento > fecha_inicial and fecha_elemento < fecha_final:
+                lt.addLast(lista_rango, elemento)
+
+        dic1=lista_rango['elements']
+        numero_elementos=len(dic1)
+        print("El número total de obras adquiridas por compra es de : " + str(controller.obrasAdquiridasPorCompra(datos)))
+        print('El número de elementos en el rango es: ' + str(numero_elementos))
+        print(' ')
+        print('Los tres primeros elementos son:')
+        print(dic1[0])
+        print(dic1[1])
+        print(dic1[2])
+        print('')
+        print('Los tres últimos elementos son:')
+        print(dic1[numero_elementos-3])
+        print(dic1[numero_elementos-2])
+        print(dic1[numero_elementos-1])
+        print(' ')
+        
+        #print("Para la muestra de", tamanho_muestra, " elementos, el tiempo (mseg) es: ", str(resultado[0]))   
         
     
     elif int(inputs[0]) == 4:
