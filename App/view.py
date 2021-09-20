@@ -96,8 +96,6 @@ while True:
         lista_final = info_ordenada[1]
         tiempo = info_ordenada[0]
         
-        #print(info)
-        
         primeros_3 = lista_final['elements'][:3]
         ultimos_3 = lista_final['elements'][(len(lista_final['elements'])-2):]
         primeros_ultimos = primeros_3 + ultimos_3
@@ -121,14 +119,12 @@ while True:
 
 
     elif int(inputs[0]) == 3:
-        #tamanho_muestra = int(input('Escriba el tamaño de la muestra que quiere analizar: '))
         fecha_inicial_texto = input('Escriba la fecha inicial: ')
         fecha_inicial = datetime.strptime(fecha_inicial_texto, '%Y-%m-%d')
         fecha_final_texto = input('Escriba la fecha final: ')
         fecha_final = datetime.strptime(fecha_final_texto, '%Y-%m-%d')
         datos = lt.subList(catalogo['obras'], 1, len(catalogo['obras']['elements']))
         datos = datos.copy()
-        #print(catalogo['obras'])
         
         resultado = controller.llamarQuicksort(datos)   
         
