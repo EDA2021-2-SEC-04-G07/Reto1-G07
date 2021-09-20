@@ -125,12 +125,18 @@ def consultarId(datos, nombreArtista):
     
     info = datos['artistas']['elements']
     idArtista = ""
+    encontro = False
+    i = 0
     
-    for i in info:
-        if i['nombre'] == nombreArtista:
-            idArtista = i['id']
-            break
+    while not(encontro):
         
+        if (info[i]['nombre'] == nombreArtista):
+            idArtista = info[i]['id']
+            encontro = True
+            
+        i += 1
+        
+    return idArtista     
     return id  
 
 def buscarObrasPorNacionalidad(datos, nacionalidad):
@@ -218,12 +224,13 @@ def filtrarObrasPorId(datos, idArtista, tipo_lista):
     mayor = None
     
     for i in info_obras:
-        if i['tecnica'] == idArtista:
+        tamanho_id = len(i['id'])
+        if (str(i['id'][1:(tamanho_id-1)]) == idArtista):
             lt.addLast(obrasDelArtista, i)
             lista_temp_1.append(i['tecnica'])
         
-        if i['tecnica'] not in lista_temp_2:
-            lista_temp_2.append(i['tecnica'])
+            if i['tecnica'] not in lista_temp_2:
+                lista_temp_2.append(i['tecnica'])
     
     return obrasDelArtista, lista_temp_1, lista_temp_2
           
@@ -246,58 +253,73 @@ def cmpArtistaPorNacimiento(artista1, artista2):
     
 def cmpObrasPorFecha(obra1, obra2):
     
-    if int(obra1['fecha']) < int(obra2['fecha']):
+    if (int(obra1['fecha']) < int(obra2['fecha'])):
         return True
     else:
         return False
 
 # Funciones de ordenamiento
 
-def insertion(datos): 
+def insertion(datos, identificador): 
     tiempo_inicial = time.process_time()
-    lista_ordenada = ist.sort(datos, cmpArtistaPorNacimiento)
+    
+    if identificador == 1:
+        lista_ordenada = ist.sort(datos, cmpArtistaPorNacimiento)
+    elif identificador == 2:
+        lista_ordenada = ist.sort(datos, cmpObrasPorFecha)
+    elif identificador == 3:
+        lista_ordenada = ist.sort(datos, cmpArtworkByDateAcquired)
+        
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
     
     return duracion, lista_ordenada
 
-def shell(datos):   
+def shell(datos, identificador):   
     tiempo_inicial = time.process_time()
-    lista_ordenada = sst.sort(datos, cmpObrasPorFecha)
+    
+    if identificador == 1:
+        lista_ordenada = sst.sort(datos, cmpArtistaPorNacimiento)
+    elif identificador == 2:
+        lista_ordenada = sst.sort(datos, cmpObrasPorFecha)
+    elif identificador == 3:
+        lista_ordenada = sst.sort(datos, cmpArtworkByDateAcquired)
+        
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
     
     return duracion, lista_ordenada
 
-def merge(datos, cmpFunction):
+def merge(datos, identificador):
     tiempo_inicial = time.process_time()
-    lista_ordenada = mst.sort(datos, cmpFunction)
+    
+    if identificador == 1:
+        lista_ordenada = mst.sort(datos, cmpArtistaPorNacimiento)
+    elif identificador == 2:
+        lista_ordenada = mst.sort(datos, cmpObrasPorFecha)
+    elif identificador == 3:
+        lista_ordenada = mst.sort(datos, cmpArtworkByDateAcquired)
+
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
     
     return duracion, lista_ordenada
 
-def quicksort(datos):
+def quicksort(datos, identificador):
     tiempo_inicial = time.process_time()
-    lista_ordenada = qst.sort(datos, cmpArtworkByDateAcquired)
+    
+    if identificador == 1:
+        lista_ordenada = qst.sort(datos, cmpArtistaPorNacimiento)
+    elif identificador == 2:
+        lista_ordenada = qst.sort(datos, cmpObrasPorFecha)
+    elif identificador == 3:
+        lista_ordenada = qst.sort(datos, cmpArtworkByDateAcquired)
+
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
     
     return duracion, lista_ordenada
 
 #Otras
-
-#def definircmpFunction(identificador):
-    
-    #if identificador == 1:
-        #cmpFunction = cmpArtworkByDateAcquired
-    
-    #elif identificador == 2:
-     #   cmpFunction = cmpArtistaPorNacimiento
-        
-    #return cmpFunction
-
-
-#cmpFunction = definircmpFunction()
         
     

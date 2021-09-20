@@ -89,9 +89,10 @@ while True:
         anho_inicial = int(input('Digite un año inicial: '))
         anho_final = int(input('Digite un año final: '))        
         datos = catalogo.copy()
+        identificador = 1
         
         info = controller.llamarArtistas(datos, anho_inicial, anho_final, tipo_lista)
-        info_ordenada = controller.llamarOrdenarArtistasPorNacimiento(info)
+        info_ordenada = controller.llamarInsertion(info, identificador)
         
         lista_final = info_ordenada[1]
         tiempo = info_ordenada[0]
@@ -125,8 +126,10 @@ while True:
         fecha_final = datetime.strptime(fecha_final_texto, '%Y-%m-%d')
         datos = lt.subList(catalogo['obras'], 1, len(catalogo['obras']['elements']))
         datos = datos.copy()
+        identificador = 3
+        #print(catalogo['obras'])
         
-        resultado = controller.llamarQuicksort(datos)   
+        resultado = controller.llamarQuicksort(datos, identificador)   
         
         print("Creando lista ....")   
         dic=resultado[1]
@@ -166,12 +169,13 @@ while True:
     elif int(inputs[0]) == 4:
         
         datos = catalogo.copy()
+        identificador = 2
         nombreArtista = input('Escriba el nombre del artista a consultar: ')
         
-        idArtista = controller.llamarConsultarId(datos, nombreArtista) 
-        print(idArtista)     
+        idArtista = controller.llamarConsultarId(datos, nombreArtista)      
         listaFiltradaPorId = controller.llamarFiltrarObrasPorId(datos, idArtista, tipo_lista)
-        listaOrdenadaDeObras = controller.llamarOrdenarObras(listaFiltradaPorId[0])
+        print(listaFiltradaPorId)
+        listaOrdenadaDeObras = controller.llamarInsertion(listaFiltradaPorId[0], identificador)
         
         mayor = 0
         tecnica_mayor = None
@@ -183,11 +187,11 @@ while True:
                 tecnica_mayor = i
                 
         print("Clasificando ...")       
-        print(('{} con MOMA Id {} tiene {} obras a su nombre en el museo.').format(nombreArtista, idArtista, len(listaFiltradaPorId[0])))
-        print(('Existen {} medio/técnicas diferentes en su trabajo.').format(len(listaFiltradaPorId[2])))
+        print(('{} con MOMA Id {} tiene {} obras a su nombre en el museo.').format(nombreArtista, idArtista, listaFiltradaPorId[0]['size']))
+        print(('Existen {} medios/técnicas diferentes en su trabajo.').format(len(listaFiltradaPorId[2])))
         print('Su técnica más utilizada es {} con {} obras.'.format(tecnica_mayor, mayor))    
               
-        for i in listaFiltradaPorId[0]:
+        for i in listaFiltradaPorId[0]['elements']:
             print(i)
         
         input()
@@ -201,17 +205,21 @@ while True:
         lista = controller.llamarListaNacionalidades(datos)
         nacionalidad = lista[0][0]
         lista_obras = controller.llamarBuscarObrasPorNacionalidad(datos, nacionalidad)
-        cont = 0
-        print(f'Las primeras 20 obras de nacionalidad {nacionalidad}')
-        for i in lista_obras['elements']:
-            while cont < 20:
-                print(f'Obra de nacionalidad {nacionalidad}: {i}')
-                print(' ')
-                cont = cont + 1
+        cont = 0          
         
         print('La lista de nacionalidades ordenadas por el total de obras de mayor a menor (TOP 10) es :')
         print(' ')
         print(lista[0:10])
+        print(' ')
+        print(f'Las primeras 3 obras de nacionalidad {nacionalidad}')
+        print(lista_obras['elements'][0])
+        print(lista_obras['elements'][1])
+        print(lista_obras['elements'][2])
+        print(' ')
+        print(f'Las ultimas 3 obras de nacionalidad {nacionalidad}')
+        print(lista_obras['elements'][len(lista_obras['elements'])-3])
+        print(lista_obras['elements'][len(lista_obras['elements'])-2])
+        print(lista_obras['elements'][len(lista_obras['elements'])-1])
         input()
         system("cls")
 
