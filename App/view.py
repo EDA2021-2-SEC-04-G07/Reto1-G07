@@ -46,6 +46,8 @@ def printMenu():
     print("3- Lista cronológica de las adquisiciones")
     print("4- Clasificar las obras de un artista por técnica")
     print("5- Clasificar las obras por la nacionalidad de sus creadores")
+    print("6- Transportar obras de un departamento ")
+    print("7- Crear nueva exposición")
 
 catalogo = None
 
@@ -222,6 +224,40 @@ while True:
         print(lista_obras['elements'][len(lista_obras['elements'])-1])
         input()
         system("cls")
+        
+    elif (inputs[0]) == 6:
+        
+        pass
+    
+    elif (inputs[0]) == 7:
+        
+        datos = catalogo.copy()
+        anhoInicial = int(input("Digite el año inicial: "))
+        anhoFinal = int(input("Digite el año final: "))
+        areaDisponible = float(input("Digite el área disponible en m^2: "))
+        
+        rangoObrasRequerido = controller.llamarObtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista)
+        nuevaExposicion = controller.llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista)
+        
+        print('El MoMA va a exhibir piezas desde {} hasta {}'.format(anhoInicial, anhoFinal))
+        print('Hay {} posibles piezas para un área de {} m^2 '.format(len(rangoObrasRequerido['elements']), areaDisponible))
+        print('La posible exhibición tiene {} piezas'.format(len(nuevaExposicion[0]['elements'])))
+        print('Se ocuparon {} m^2 de los {} m^2 disponibles'.format(nuevaExposicion[1], areaDisponible))
+        print('Las primeras 5 obras: ')
+         
+        for i in nuevaExposicion[0]['elements'][:5]:
+            print(i)
+            
+        print('Las últimas 5 obras: ')
+        
+        for i in nuevaExposicion[0]['elements'][(len(nuevaExposicion[0]['elements']) - 4):]:
+            print(i)
+            
+        print('Toda la exposición completa se muestra a continuación: ')
+        
+        for i in nuevaExposicion[0]['elements']:
+            print(i)        
+        
 
     else:
         system("cls")

@@ -105,3 +105,9 @@ def llamarListaNacionalidades(datos):
 
 def llamarBuscarObrasPorNacionalidad(datos, nacionalidad):
     return model.buscarObrasPorNacionalidad(datos, nacionalidad)
+
+def llamarObtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista):
+    return model.obtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista)
+
+def llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista):
+    return model.crearExposicion(rangoObrasRequerido)

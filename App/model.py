@@ -235,6 +235,19 @@ def filtrarObrasPorId(datos, idArtista, tipo_lista):
     return obrasDelArtista, lista_temp_1, lista_temp_2
           
     
+def obtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista):
+    
+    info = datos['obras']['elements']
+    rangoObras = lt.newList(tipo_lista)
+    
+    for i in info:
+        if ((int(i['fecha']) <= anhoFinal) and int(i['fecha'] >= anhoInicial)):
+            i['areaObra'] = (((float(i['altura']))*(float(i['ancho']))))*0.0001
+            lt.addLast(rangoObras, i)    
+            
+    return rangoObras
+            
+    
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 def cmpArtworkByDateAcquired(artwork1, artwork2):
@@ -321,5 +334,19 @@ def quicksort(datos, identificador):
     return duracion, lista_ordenada
 
 #Otras
-        
+  
+def crearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista):
     
+    areaUsada = 0
+    i = 0
+    info = rangoObrasRequerido['elements']
+    nuevaExposicion = lt.newList(tipo_lista)
+    
+    while ((areaUsada <= areaDisponible) and (i < (len(rangoObrasRequerido['elements'])))):
+        
+        areaUsada += info[i]['areaObra']
+        lt.addLast(nuevaExposicion, info[i])
+        
+        i += 1
+        
+    return nuevaExposicion, areaUsada
