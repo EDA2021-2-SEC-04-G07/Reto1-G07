@@ -29,6 +29,8 @@ import config as cf
 import time
 import re
 import operator
+import math
+from decimal import Decimal, Rounded
 from DISClib.Algorithms.Sorting import insertionsort as ist
 from DISClib.Algorithms.Sorting import mergesort as mst
 from DISClib.Algorithms.Sorting import quicksort as qst
@@ -64,7 +66,7 @@ def agregarArtista(catalogo, artista):
     lt.addLast(catalogo['artistas'], artista)
 
 def agregarObra(catalogo, obra):
-    obra=nuevaObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'])
+    obra=nuevaObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'], obra['Diameter (cm)'], obra['Length (cm)'])
     lt.addLast(catalogo['obras'], obra)
 
 # Funciones para creacion de datos
@@ -80,9 +82,9 @@ def nuevoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, gener
     #artista['obras']=lt.newList('ARRAY_LIST')
     return artista
 
-def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea, dimensiones):
+def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea, dimensiones, diametro, largo):
     
-    obra={'id':"", 'objectId':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':"", 'linea_adquisicion':"", 'dimensiones':""}
+    obra={'id':"", 'objectId':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':"", 'linea_adquisicion':"", 'dimensiones':"", 'diametro':"", 'largo':""}
     obra['id']=id
     obra['objectId'] = objectId
     obra['titulo']=titulo
@@ -95,10 +97,43 @@ def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisic
     obra['peso']=peso
     obra['linea_adquisicion']=linea
     obra['dimensiones'] = dimensiones
+    obra['diametro']=diametro
+    obra['largo']=largo
     
     return obra
 
 # Funciones de consulta
+
+def darListaObrasDepartamento(datos, departamento):
+
+    lista_obras = lt.newList('ARRAY_LIST')
+    info = datos['obras']['elements']
+
+    for i in info:
+        if i['departamento'] == departamento:
+            lt.addLast(lista_obras, i)
+
+    return lista_obras
+
+def darPrecioTransporteDepartamento(lista_obras):
+    lista = lista_obras['elements']
+    costo_total=0
+    for i in lista:
+        costo_total = costo_total + calcularCostoTransporteObra(i)
+    
+    return costo_total
+
+def darPesoTotalDepartamento(lista_obras):
+    lista = lista_obras['elements']
+    pesoTotal = 0
+    for i in lista:
+        if not i['peso']:
+            pass
+        else:
+            pesoTotal = Decimal(i['peso']) + pesoTotal
+
+    return pesoTotal  
+
 
 def compararFechasArtistas(datos, anho_inicial, anho_final, tipo_lista):
     
@@ -326,6 +361,13 @@ def cmpObrasPorFecha(obra1, obra2):
     else:
         return False
 
+def cmpObrasPorCostoTransporte(obra1, obra2):
+    
+    if (int(obra1['costo_transporte']) < int(obra2['costo_transporte'])):
+        return True
+    else:
+        return False
+
 # Funciones de ordenamiento
 
 def insertion(datos, identificador): 
@@ -337,6 +379,8 @@ def insertion(datos, identificador):
         lista_ordenada = ist.sort(datos, cmpObrasPorFecha)
     elif identificador == 3:
         lista_ordenada = ist.sort(datos, cmpArtworkByDateAcquired)
+    elif identificador == 4:
+        lista_ordenada = ist.sort(datos, cmpObrasPorCostoTransporte)
         
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -352,6 +396,8 @@ def shell(datos, identificador):
         lista_ordenada = sst.sort(datos, cmpObrasPorFecha)
     elif identificador == 3:
         lista_ordenada = sst.sort(datos, cmpArtworkByDateAcquired)
+    elif identificador == 4:
+        lista_ordenada = sst.sort(datos, cmpObrasPorCostoTransporte)
         
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -367,6 +413,8 @@ def merge(datos, identificador):
         lista_ordenada = mst.sort(datos, cmpObrasPorFecha)
     elif identificador == 3:
         lista_ordenada = mst.sort(datos, cmpArtworkByDateAcquired)
+    elif identificador == 4:
+        lista_ordenada = mst.sort(datos, cmpObrasPorCostoTransporte)
 
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -382,6 +430,8 @@ def quicksort(datos, identificador):
         lista_ordenada = qst.sort(datos, cmpObrasPorFecha)
     elif identificador == 3:
         lista_ordenada = qst.sort(datos, cmpArtworkByDateAcquired)
+    elif identificador == 4:
+        lista_ordenada = qst.sort(datos, cmpObrasPorCostoTransporte)
 
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -405,3 +455,67 @@ def crearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista):
         i += 1
         
     return nuevaExposicion, areaUsada
+
+def calcularCostoTransporteObra(obra):
+
+    costo_peso = 0
+    costo_area = 0
+    costo_volumen = 0
+
+    costo_mayor=0
+
+    costo = 72
+
+    if not obra['altura']:
+        altura = 0
+    else:
+        altura = Decimal(obra['altura'])/100
+    if not obra['largo']:
+        largo = 0
+    else:
+        largo = Decimal(obra['largo'])/100
+    if not obra['ancho']:
+        ancho = 0
+    else:
+        ancho = Decimal(obra['ancho'])/100
+    if not obra['peso']:
+        peso = 0
+    else:
+        peso = Decimal(obra['peso'])
+    if not obra['diametro']:
+        diametro = 0
+    else:
+        diametro = int(round(Decimal(obra['diametro'])/100))
+    
+    #Calculo del peso
+    if peso != 0:
+        costo_peso=peso*costo
+
+    #Calculo del area
+    if diametro != 0:
+        costo_area=(math.pi()*((diametro)/2)^2)*costo
+    elif largo != 0 and ancho != 0:
+        costo_area=(largo*ancho)*costo
+    elif altura != 0 and ancho != 0:
+        costo_area=(altura*ancho)*costo
+
+    #Calculo del volumen
+    if diametro != 0 and altura != 0:
+        costo_volumen=(math.pi()*((diametro)/2)^2*altura)*costo
+    elif largo != 0 and ancho != 0 and altura != 0:
+        costo_volumen=(largo*ancho*altura)*costo
+
+    if costo_area > costo_peso and costo_area > costo_volumen:
+        costo_mayor=costo_area
+    elif costo_peso > costo_area and costo_peso > costo_volumen:
+        costo_mayor=costo_peso
+    else:
+        costo_mayor=costo_volumen
+
+    if costo_mayor == 0:
+        obra['costo_transporte']=48
+        return 48
+    else:
+        obra['costo_transporte']=costo_mayor
+        return costo_mayor
+    

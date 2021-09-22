@@ -20,6 +20,7 @@
  * along withthis program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
+from App.model import calcularCostoTransporteObra
 import config as cf
 import model
 import csv
@@ -97,8 +98,8 @@ def llamarFiltrarObrasPorId(datos, idArtista, tipo_lista):
 #def llamarOrdenarObras(lista, identificador):
  
 #   return model.shell(lista, identificador)
-def llamarOrdenarObras(lista):
-    return model.shell(lista)
+def llamarOrdenarObras(lista, identidficador):
+    return model.shell(lista, identidficador)
 
 def llamarListaNacionalidades(datos):
     return model.listaNacionalidades(datos)
@@ -114,3 +115,14 @@ def llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista):
 
 def llamarAgregarArtistaPorId(datos, datosArtistas):
     return model.agregarArtistaPorId(datos, datosArtistas)
+def llamarDarListaObrasDepartamento(datos, departamento):
+    return model.darListaObrasDepartamento(datos, departamento)
+
+def llamarCalcularCostoTransporteObra(obra):
+    return calcularCostoTransporteObra(obra)
+
+def llamarDarPrecioTransporteDepartamento(lista):
+    return model.darPrecioTransporteDepartamento(lista)
+
+def llamarDarPesoTotalDepartamento(lista_obras):
+    return model.darPesoTotalDepartamento(lista_obras)

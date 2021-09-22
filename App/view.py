@@ -92,6 +92,10 @@ while True:
         primeros_3 = lt.subList(lista_final, 1, 3)  
         ultimos_3 = lt.subList(lista_final, (lt.size(lista_final)-2), 3)  
         resultado_1 = 'Hay {} artistas nacidos entre {} y {}'.format(lt.size(lista_final), anho_inicial, anho_final)
+        #primeros_3 = lista_final['elements'][:3]
+        #ultimos_3 = lista_final['elements'][(len(lista_final['elements'])-2):]
+        #primeros_ultimos = primeros_3 + ultimos_3
+        resultado_1 = 'Hay {} artistas nacidos entre {} y {}'.format(len(lista_final['elements']), anho_inicial, anho_final)
         
         print(resultado_1)
         print('========================================================')
@@ -224,23 +228,51 @@ while True:
         lista = controller.llamarListaNacionalidades(datos)
         nacionalidad = lista[0][0]
         lista_obras = controller.llamarBuscarObrasPorNacionalidad(datos, nacionalidad)
-        cont = 0
-        print(f'Las primeras 20 obras de nacionalidad {nacionalidad}')
-        for i in lista_obras['elements']:
-            while cont < 20:
-                print(f'Obra de nacionalidad {nacionalidad}: {i}')
-                print(' ')
-                cont = cont + 1
+        cont = 0          
         
         print('La lista de nacionalidades ordenadas por el total de obras de mayor a menor (TOP 10) es :')
         print(' ')
         print(lista[0:10])
+        print(' ')
+        print(f'Las primeras 3 obras de nacionalidad {nacionalidad}')
+        print(lista_obras['elements'][0])
+        print(lista_obras['elements'][1])
+        print(lista_obras['elements'][2])
+        print(' ')
+        print(f'Las ultimas 3 obras de nacionalidad {nacionalidad}')
+        print(lista_obras['elements'][len(lista_obras['elements'])-1])
+        print(lista_obras['elements'][len(lista_obras['elements'])-2])
+        print(lista_obras['elements'][len(lista_obras['elements'])-3])
         input()
         system("cls")
         
-    elif (inputs[0]) == 6:
-        
-        pass
+    elif (int(inputs[0])) == 6:
+        datos = catalogo.copy()
+        departamento = input("Escriba el departamento del museo a analizar: ")
+        lista_obras_departamento = controller.llamarDarListaObrasDepartamento(datos,departamento)
+        print('El número de obras en el departamento es: ' + str(len(lista_obras_departamento['elements'])))
+        costo = controller.llamarDarPrecioTransporteDepartamento(lista_obras_departamento)
+        print('El costo de transportar todo el departamento de obras es de: ' + str(costo) + ' USD')
+        peso_total = controller.llamarDarPesoTotalDepartamento(lista_obras_departamento)
+        print('El peso total de las obras del departamento es de: ' + str(peso_total) + 'Kg')
+        lista_ordenada = controller.llamarQuicksort(lista_obras_departamento, 3)
+        print('Las 5 obras mas antiguas son:')
+        print(lista_ordenada[1]['elements'][0])
+        print(lista_ordenada[1]['elements'][1])
+        print(lista_ordenada[1]['elements'][2])
+        print(lista_ordenada[1]['elements'][3])
+        print(lista_ordenada[1]['elements'][4])
+        print(' ')
+        lista_obras_ordenadas_costo = controller.llamarQuicksort(lista_ordenada[1], 4)
+        print('Las 5 obras mas costosas para transportar son:')
+        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-1])
+        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-2])
+        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-3])
+        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-4])
+        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-5])
+
+
+        input()
     
     elif int(inputs[0]) == 7:
         
@@ -270,6 +302,8 @@ while True:
         
         for i in nuevaExposicion[0]['elements']:
             print(i)        
+        
+        input()
         
 
     else:
