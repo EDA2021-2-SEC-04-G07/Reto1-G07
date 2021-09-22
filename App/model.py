@@ -60,29 +60,31 @@ def crearCatalogo(tipo_lista):
 # Funciones para agregar informacion al catalogo
 
 def agregarArtista(catalogo, artista):
-    artista = nuevoArtista(artista['ConstituentID'],artista['DisplayName'],artista['BeginDate'],artista['EndDate'],artista['Nationality'])
+    artista = nuevoArtista(artista['ConstituentID'],artista['DisplayName'],artista['BeginDate'],artista['EndDate'],artista['Nationality'], artista['Gender'])
     lt.addLast(catalogo['artistas'], artista)
 
 def agregarObra(catalogo, obra):
-    obra=nuevaObra(obra['ConstituentID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'])
+    obra=nuevaObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'])
     lt.addLast(catalogo['obras'], obra)
 
 # Funciones para creacion de datos
 
-def nuevoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad):
-    artista={'id':"", 'nombre':"", 'fecha_nacimiento':"", 'fecha_muerte':"", 'nacionalidad':""}
+def nuevoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, genero):
+    artista={'id':"", 'nombre':"", 'fecha_nacimiento':"", 'fecha_muerte':"", 'nacionalidad':"", 'genero':""}
     artista['id'] = id
     artista['nombre']=nombre
     artista['fecha_nacimiento'] = fecha_nacimiento
     artista['fecha_muerte'] = fecha_muerte
     artista['nacionalidad']=nacionalidad
+    artista['genero'] = genero
     #artista['obras']=lt.newList('ARRAY_LIST')
     return artista
 
-def nuevaObra(id, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea):
+def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea, dimensiones):
     
-    obra={'id':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':"", 'linea_adquisicion':""}
+    obra={'id':"", 'objectId':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':"", 'linea_adquisicion':"", 'dimensiones':""}
     obra['id']=id
+    obra['objectId'] = objectId
     obra['titulo']=titulo
     obra['fecha']=fecha
     obra['tecnica']=tecnica
@@ -92,6 +94,7 @@ def nuevaObra(id, titulo, fecha, tecnica, departamento, fecha_adquisicion, altur
     obra['ancho']=ancho
     obra['peso']=peso
     obra['linea_adquisicion']=linea
+    obra['dimensiones'] = dimensiones
     
     return obra
 
@@ -99,10 +102,11 @@ def nuevaObra(id, titulo, fecha, tecnica, departamento, fecha_adquisicion, altur
 
 def compararFechasArtistas(datos, anho_inicial, anho_final, tipo_lista):
     
-    listaArtistas = datos['artistas']['elements']
+    #listaArtistas = lt.getElement(datos['artistas'],0)
+    #listaArtistas = datos['artistas']['elements']
     listaInfo = lt.newList(tipo_lista)
     
-    for i in listaArtistas:
+    for i in lt.iterator(datos['artistas']):
         
         if (int(i['fecha_nacimiento']) >= anho_inicial and int(i['fecha_nacimiento']) <= anho_final):
             lt.addLast(listaInfo, i)
@@ -111,9 +115,10 @@ def compararFechasArtistas(datos, anho_inicial, anho_final, tipo_lista):
             
         
 def obrasAdquiridasPorCompra(datos):
+    
     contador=0
 
-    for dato in datos['elements']:
+    for dato in lt.iterator(datos):
         frase=dato['linea_adquisicion']
         if re.search('purchase',frase.lower()):
             contador=contador + 1
@@ -123,21 +128,15 @@ def obrasAdquiridasPorCompra(datos):
 
 def consultarId(datos, nombreArtista):
     
-    info = datos['artistas']['elements']
     idArtista = ""
-    encontro = False
-    i = 0
     
-    while not(encontro):
+    for i in lt.iterator(datos['artistas']):
         
-        if (info[i]['nombre'] == nombreArtista):
-            idArtista = info[i]['id']
-            encontro = True
-            
-        i += 1
+        if i['nombre'] == nombreArtista:
+            idArtista = i['id']
+            break
         
-    return idArtista     
-    return id  
+    return idArtista      
 
 def buscarObrasPorNacionalidad(datos, nacionalidad):
     info_obras = datos['obras']['elements']
@@ -217,20 +216,19 @@ def listaNacionalidades(datos):
 
 def filtrarObrasPorId(datos, idArtista, tipo_lista):
     
-    info_obras = datos['obras']['elements']
     obrasDelArtista = lt.newList(tipo_lista)
     lista_temp_1 = []
-    lista_temp_2 = []
-    mayor = None
+    lista_temp_2 = lt.newList(tipo_lista)
     
-    for i in info_obras:
+    for i in lt.iterator(datos['obras']):
+        
         tamanho_id = len(i['id'])
         if (str(i['id'][1:(tamanho_id-1)]) == idArtista):
             lt.addLast(obrasDelArtista, i)
             lista_temp_1.append(i['tecnica'])
-        
-            if i['tecnica'] not in lista_temp_2:
-                lista_temp_2.append(i['tecnica'])
+
+            if (lt.isPresent(lista_temp_2, i['tecnica']) == 0):
+                lt.addLast(lista_temp_2, i['tecnica'])
     
     return obrasDelArtista, lista_temp_1, lista_temp_2
           
@@ -241,11 +239,68 @@ def obtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista):
     rangoObras = lt.newList(tipo_lista)
     
     for i in info:
-        if ((int(i['fecha']) <= anhoFinal) and int(i['fecha'] >= anhoInicial)):
-            i['areaObra'] = (((float(i['altura']))*(float(i['ancho']))))*0.0001
+        if (('before' in i['fecha']) or ('Before' in i['fecha']) or ('December' in i['fecha']) or ('c.' in i['fecha'])):
+            i ['fecha'] = i['fecha'][(len(i['fecha'])-4):] 
+            print(i['fecha'])  
+        elif i['fecha'] == 'Unknown':
+            i['fecha'] = 0   
+            print(i['fecha'])  
+        elif '(November 11-14) 1963' == i['fecha']:
+            i['fecha'] = 1963
+            print(i['fecha']) 
+        elif '(July 30-August 7) 1965' == i['fecha']:
+            i['fecha'] = 1965
+            print(i['fecha']) 
+        elif '(October, 1985)' == i['fecha']:
+            i['fecha'] = 1965
+            print(i['fecha'])
+        elif 'published November 1898' == i['fecha']:
+            i['fecha'] = 1898
+            print(i['fecha'])  
+        elif (('-' in i['fecha']) and ('(' in i['fecha'])):
+            i['fecha'] = i['fecha'][1:(len(i['fecha'])-6)]
+            print(i['fecha']) 
+        elif '-' in i['fecha']:
+            if (i['fecha']).index('-') == 0:
+                i['fecha'] = i['fecha'][1:]
+            else:
+                i['fecha'] = i['fecha'][:4]
+            print(i['fecha'])
+        elif '(newspaper published October 19, 1994 through March 14, 1995)' == i['fecha']:
+            i['fecha'] = 1994
+            print(i['fecha']) 
+        
+        
+                        
+        if ((int(i['fecha']) <= anhoFinal) and (int(i['fecha']) >= anhoInicial)):
+            alturaObra = i['altura']
+            anchoObra = i['ancho']
+            
+            print(i['fecha']) 
+            
+            if alturaObra == "":
+                alturaObra = 0
+            if anchoObra == "":
+                anchoObra = 0
+                
+            i['areaObra'] = (((float(alturaObra))*(float(anchoObra))))*0.0001
             lt.addLast(rangoObras, i)    
             
     return rangoObras
+
+
+def agregarArtistaPorId(datos, datosArtistas):
+    
+    for i in lt.iterator(datos):   
+        for j in lt.iterator(datosArtistas):
+            
+            if (j['nombre'] != ""):
+                if i['id'][1:-1] == j['id']:
+                    i['artista'] = j['nombre']
+            else:
+                i['artista'] = 'Unknown'
+   
+    return datos
             
     
 # Funciones utilizadas para comparar elementos dentro de una lista
@@ -281,7 +336,7 @@ def insertion(datos, identificador):
     elif identificador == 2:
         lista_ordenada = ist.sort(datos, cmpObrasPorFecha)
     elif identificador == 3:
-        lista_ordenada == ist.sort(datos, cmpArtworkByDateAcquired)
+        lista_ordenada = ist.sort(datos, cmpArtworkByDateAcquired)
         
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -296,7 +351,7 @@ def shell(datos, identificador):
     elif identificador == 2:
         lista_ordenada = sst.sort(datos, cmpObrasPorFecha)
     elif identificador == 3:
-        lista_ordenada == sst.sort(datos, cmpArtworkByDateAcquired)
+        lista_ordenada = sst.sort(datos, cmpArtworkByDateAcquired)
         
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -311,7 +366,7 @@ def merge(datos, identificador):
     elif identificador == 2:
         lista_ordenada = mst.sort(datos, cmpObrasPorFecha)
     elif identificador == 3:
-        lista_ordenada == mst.sort(datos, cmpArtworkByDateAcquired)
+        lista_ordenada = mst.sort(datos, cmpArtworkByDateAcquired)
 
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -326,7 +381,7 @@ def quicksort(datos, identificador):
     elif identificador == 2:
         lista_ordenada = qst.sort(datos, cmpObrasPorFecha)
     elif identificador == 3:
-        lista_ordenada == qst.sort(datos, cmpArtworkByDateAcquired)
+        lista_ordenada = qst.sort(datos, cmpArtworkByDateAcquired)
 
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000

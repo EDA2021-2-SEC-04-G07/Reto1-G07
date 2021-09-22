@@ -36,8 +36,6 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 """
 
-x = 1
-
 def printMenu():
     system("cls")
     print("Bienvenido")
@@ -69,20 +67,13 @@ Menu principal
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
+    
     if int(inputs[0]) == 1:
-        print("1- ARRAY_LIST")
-        print("2- LINKED_LIST")
-        seleccion_tipo_lista = int(input("Seleccione el tipo de lista: "))
-        
-        if seleccion_tipo_lista == 1:
-            tipo_lista = 'ARRAY_LIST'
-            
-        elif seleccion_tipo_lista == 2:
-            tipo_lista = 'LINKED_LIST'
             
         print("Cargando información de los archivos ....")
-        catalogo = controller.initCatalogo(tipo_lista)
+        catalogo = controller.initCatalogo(tipo_lista = 'ARRAY_LIST')
         cargarDatos(catalogo)
+
         system("cls")
         
 
@@ -93,55 +84,61 @@ while True:
         datos = catalogo.copy()
         identificador = 1
         
-        info = controller.llamarArtistas(datos, anho_inicial, anho_final, tipo_lista)
-        info_ordenada = controller.llamarInsertion(info, identificador)
-        
+        info = controller.llamarArtistas(datos, anho_inicial, anho_final, tipo_lista = 'ARRAY_LIST')
+        info_ordenada = controller.llamarInsertion(info, identificador)      
         lista_final = info_ordenada[1]
         tiempo = info_ordenada[0]
         
-        #print(info)
+        primeros_3 = lt.subList(lista_final, 1, 3)  
+        ultimos_3 = lt.subList(lista_final, (lt.size(lista_final)-2), 3)  
+        resultado_1 = 'Hay {} artistas nacidos entre {} y {}'.format(lt.size(lista_final), anho_inicial, anho_final)
         
-        primeros_3 = lista_final['elements'][:3]
-        ultimos_3 = lista_final['elements'][(len(lista_final['elements'])-2):]
-        primeros_ultimos = primeros_3 + ultimos_3
-        resultado_1 = 'Hay {} artistas nacidos entre {} y {}'.format(len(lista_final['elements']), anho_inicial, anho_final)
-        
-        print("Creando lista ....")
         print(resultado_1)
-        print('=========================================================')
-        print('Los primeros y los últimos 3 son: ')
-        print(primeros_ultimos)
-        print('=========================================================')
-        print('La información de los artistas: ')
+        print('========================================================')
         
-        for i in lista_final['elements']:
-            print(i)
-            
-        print('El tiempo de ejecución fue de: ', tiempo, ' s.')
+        print('Los primeros 3 artistas en el rango son: ')
+        print('        Nombre         | Fecha de Nacimiento | Fecha de muerte |   Nacionalidad   |    Género   ')
+        print('==================================================================================================')
+        for i in lt.iterator(primeros_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}\t\t  {}'.format(i['nombre'], i['fecha_nacimiento'], i['fecha_muerte'], i['nacionalidad'], i['genero']))
+        print(' ')  
+        print('Los últimos 3 artistas en el rango son: ')
+        print('        Nombre         | Fecha de Nacimiento | Fecha de muerte |   Nacionalidad   |    Género   ')
+        print('==================================================================================================')
+        for i in lt.iterator(ultimos_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}\t\t  {}'.format(i['nombre'], i['fecha_nacimiento'], i['fecha_muerte'], i['nacionalidad'], i['genero']))
+        print('==================================================================================================')    
+        print('El tiempo de ejecución fue de: ', tiempo, ' ms.')
 
         input()
         system("cls")
 
 
     elif int(inputs[0]) == 3:
-        #tamanho_muestra = int(input('Escriba el tamaño de la muestra que quiere analizar: '))
+        
         fecha_inicial_texto = input('Escriba la fecha inicial: ')
         fecha_inicial = datetime.strptime(fecha_inicial_texto, '%Y-%m-%d')
         fecha_final_texto = input('Escriba la fecha final: ')
         fecha_final = datetime.strptime(fecha_final_texto, '%Y-%m-%d')
-        datos = lt.subList(catalogo['obras'], 1, len(catalogo['obras']['elements']))
+        datos = lt.subList(catalogo['obras'], 1, lt.size(catalogo['obras']))
         datos = datos.copy()
         identificador = 3
-        #print(catalogo['obras'])
-        
         resultado = controller.llamarQuicksort(datos, identificador)   
-        
-        print("Creando lista ....")   
+          
         dic=resultado[1]
-        lista=dic['elements']
+        tiempo = resultado[0]
+        datosArtistas = catalogo['artistas']
+        
+        
+        
+        dic_con_artista = controller.llamarAgregarArtistaPorId(dic, datosArtistas)
+        print(dic)
+        print('==========================================00')
+        print(dic_con_artista)
+        #lista=dic['elements']
         lista_rango=lt.newList('ARRAY_LIST')
         
-        for elemento in lista:
+        for elemento in lt.iterator(dic):
             if elemento['fecha_adquisicion']=='':
                 pass
             else:
@@ -149,21 +146,33 @@ while True:
                 if fecha_elemento > fecha_inicial and fecha_elemento < fecha_final:
                   lt.addLast(lista_rango, elemento)
 
-        dic1=lista_rango['elements']
-        numero_elementos=len(dic1)
-        print("El número total de obras adquiridas por compra es de : " + str(controller.obrasAdquiridasPorCompra(datos)))
+        numero_elementos = lt.size(lista_rango)
+        primeros_3 = lt.subList(dic_con_artista, 1, 3)
+        ultimos_3 = lt.subList(dic_con_artista, (lt.size(dic_con_artista)-4), 3)
+        #dic1=lista_rango['elements']
+        #numero_elementos=len(dic1)
+        print("El número total de obras adquiridas por compra es de : " + str(controller.obrasAdquiridasPorCompra(dic)))
         print('El número de elementos en el rango es: ' + str(numero_elementos))
         print(' ')
         print('Los tres primeros elementos son:')
-        print(dic1[0])
-        print(dic1[1])
-        print(dic1[2])
+        print('        Título         |    Artísta(s)    |    Fecha    |     Medio     |       Dimensiones       ')
+        print('==================================================================================================')
+        for i in lt.iterator(primeros_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}\t\t  {}'.format(i['titulo'], i['artista'], i['fecha'], i['tecnica'], i['dimensiones']))
+        #print(dic1[0])
+        #print(dic1[1])
+        #print(dic1[2])
         print('')
         print('Los tres últimos elementos son:')
-        print(dic1[numero_elementos-3])
-        print(dic1[numero_elementos-2])
-        print(dic1[numero_elementos-1])
+        #print(dic1[numero_elementos-3])
+        #print(dic1[numero_elementos-2])
+        #print(dic1[numero_elementos-1])
+        print('        Título         |    Artísta(s)    |    Fecha    |     Medio     |       Dimensiones       ')
+        print('==================================================================================================')
+        for i in lt.iterator(ultimos_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}\t\t  {}'.format(i['titulo'], i['artista'], i['fecha'], i['tecnica'], i['dimensiones']))
         print(' ')
+        print('El tiempo de ejecución fue de: ', tiempo, ' ms.')
 
         input()
         system("cls")
@@ -178,26 +187,31 @@ while True:
         nombreArtista = input('Escriba el nombre del artista a consultar: ')
         
         idArtista = controller.llamarConsultarId(datos, nombreArtista)      
-        listaFiltradaPorId = controller.llamarFiltrarObrasPorId(datos, idArtista, tipo_lista)
+        listaFiltradaPorId = controller.llamarFiltrarObrasPorId(datos, idArtista, tipo_lista = 'ARRAY_LIST')
         print(listaFiltradaPorId)
         listaOrdenadaDeObras = controller.llamarInsertion(listaFiltradaPorId[0], identificador)
         
         mayor = 0
         tecnica_mayor = None
         
-        for i in listaFiltradaPorId[2]:
+        for i in lt.iterator(listaFiltradaPorId[2]):
             cuant = listaFiltradaPorId[1].count(i)
             if cuant > mayor:
                 mayor = cuant
                 tecnica_mayor = i
                 
         print("Clasificando ...")       
-        print(('{} con MOMA Id {} tiene {} obras a su nombre en el museo.').format(nombreArtista, idArtista, listaFiltradaPorId[0]['size']))
-        print(('Existen {} medios/técnicas diferentes en su trabajo.').format(len(listaFiltradaPorId[2])))
+        print(('{} con MOMA Id {} tiene {} obras a su nombre en el museo.').format(nombreArtista, idArtista, lt.size(listaOrdenadaDeObras[1])))
+        print(('Existen {} medios/técnicas diferentes en su trabajo.').format(lt.size(listaFiltradaPorId[2])))
         print('Su técnica más utilizada es {} con {} obras.'.format(tecnica_mayor, mayor))    
-              
-        for i in listaFiltradaPorId[0]['elements']:
-            print(i)
+        print('')   
+        print('\tTítulo \t |Fecha de la obra|    Técnica    |    \t\t Dimensiones    ')  
+        print('==================================================================================================')      
+        for i in lt.iterator(listaOrdenadaDeObras[1]):
+            if i['tecnica'] == tecnica_mayor:
+                print('{}\t   {} \t\t {} \t\t {}'.format(i['titulo'], i['fecha'], i['tecnica'], i['dimensiones']))
+        print('')
+        print('El tiempo de ejecución fue de: ', listaOrdenadaDeObras[0], ' ms.')
         
         input()
         system("cls")
@@ -228,15 +242,15 @@ while True:
         
         pass
     
-    elif (inputs[0]) == 7:
+    elif int(inputs[0]) == 7:
         
         datos = catalogo.copy()
         anhoInicial = int(input("Digite el año inicial: "))
         anhoFinal = int(input("Digite el año final: "))
         areaDisponible = float(input("Digite el área disponible en m^2: "))
         
-        rangoObrasRequerido = controller.llamarObtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista)
-        nuevaExposicion = controller.llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista)
+        rangoObrasRequerido = controller.llamarObtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista = 'ARRAY_LIST')
+        nuevaExposicion = controller.llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista = 'ARRAY_LIST')
         
         print('El MoMA va a exhibir piezas desde {} hasta {}'.format(anhoInicial, anhoFinal))
         print('Hay {} posibles piezas para un área de {} m^2 '.format(len(rangoObrasRequerido['elements']), areaDisponible))

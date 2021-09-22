@@ -61,19 +61,19 @@ def cargarObras(catalogo):
 # Funciones de ordenamiento
 
 def llamarInsertion(datos, identificador):
-    resultado = model.insertion(datos)
+    resultado = model.insertion(datos, identificador)
     return resultado
 
 def llamarShell(datos, identificador):
-    resultado = model.shell(datos)
+    resultado = model.shell(datos, identificador)
     return resultado
 
 def llamarMerge(datos, identificador):
-    resultado = model.merge(datos)
+    resultado = model.merge(datos, identificador)
     return resultado
 
 def llamarQuicksort(datos, identificador):
-    resultado = model.quicksort(datos)
+    resultado = model.quicksort(datos, identificador)
     return resultado
 
 #def llamarOrdenarArtistasPorNacimiento(info, cmpFunction):
@@ -111,3 +111,6 @@ def llamarObtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista):
 
 def llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista):
     return model.crearExposicion(rangoObrasRequerido)
+
+def llamarAgregarArtistaPorId(datos, datosArtistas):
+    return model.agregarArtistaPorId(datos, datosArtistas)
