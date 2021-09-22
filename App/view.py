@@ -92,9 +92,6 @@ while True:
         primeros_3 = lt.subList(lista_final, 1, 3)  
         ultimos_3 = lt.subList(lista_final, (lt.size(lista_final)-2), 3)  
         resultado_1 = 'Hay {} artistas nacidos entre {} y {}'.format(lt.size(lista_final), anho_inicial, anho_final)
-        #primeros_3 = lista_final['elements'][:3]
-        #ultimos_3 = lista_final['elements'][(len(lista_final['elements'])-2):]
-        #primeros_ultimos = primeros_3 + ultimos_3
         resultado_1 = 'Hay {} artistas nacidos entre {} y {}'.format(len(lista_final['elements']), anho_inicial, anho_final)
         
         print(resultado_1)
@@ -132,14 +129,7 @@ while True:
         dic=resultado[1]
         tiempo = resultado[0]
         datosArtistas = catalogo['artistas']
-        
-        
-        
         dic_con_artista = controller.llamarAgregarArtistaPorId(dic, datosArtistas)
-        print(dic)
-        print('==========================================00')
-        print(dic_con_artista)
-        #lista=dic['elements']
         lista_rango=lt.newList('ARRAY_LIST')
         
         for elemento in lt.iterator(dic):
@@ -153,9 +143,8 @@ while True:
         numero_elementos = lt.size(lista_rango)
         primeros_3 = lt.subList(dic_con_artista, 1, 3)
         ultimos_3 = lt.subList(dic_con_artista, (lt.size(dic_con_artista)-4), 3)
-        #dic1=lista_rango['elements']
-        #numero_elementos=len(dic1)
-        print("El número total de obras adquiridas por compra es de : " + str(controller.obrasAdquiridasPorCompra(dic)))
+        
+        print("El número total de obras adquiridas por compra es de : " + str(controller.obrasAdquiridasPorCompra(lista_rango)))
         print('El número de elementos en el rango es: ' + str(numero_elementos))
         print(' ')
         print('Los tres primeros elementos son:')
@@ -163,14 +152,8 @@ while True:
         print('==================================================================================================')
         for i in lt.iterator(primeros_3):
             print('{} \t\t\t {}  \t\t    {}   \t  {}\t\t  {}'.format(i['titulo'], i['artista'], i['fecha'], i['tecnica'], i['dimensiones']))
-        #print(dic1[0])
-        #print(dic1[1])
-        #print(dic1[2])
         print('')
         print('Los tres últimos elementos son:')
-        #print(dic1[numero_elementos-3])
-        #print(dic1[numero_elementos-2])
-        #print(dic1[numero_elementos-1])
         print('        Título         |    Artísta(s)    |    Fecha    |     Medio     |       Dimensiones       ')
         print('==================================================================================================')
         for i in lt.iterator(ultimos_3):
@@ -281,27 +264,34 @@ while True:
         anhoFinal = int(input("Digite el año final: "))
         areaDisponible = float(input("Digite el área disponible en m^2: "))
         
-        rangoObrasRequerido = controller.llamarObtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista = 'ARRAY_LIST')
-        nuevaExposicion = controller.llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista = 'ARRAY_LIST')
+        lista_fechas_modificadas = controller.llamarfiltrarFechasObras(datos['obras'])
+        datosArtistas = catalogo['artistas']
+        rangoObrasRequerido = controller.llamarObtenerRangoObras(lista_fechas_modificadas, anhoInicial, anhoFinal, tipo_lista = 'ARRAY_LIST')
+        nuevaExposicion1 = controller.llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista = 'ARRAY_LIST')
+        nuevaExposicion = controller.llamarAgregarArtistaPorId(nuevaExposicion1[0], datosArtistas)
+        
+        ultimas_5 = lt.subList(nuevaExposicion, (lt.size(nuevaExposicion)- 4), 5)
+        
+        print(nuevaExposicion)
         
         print('El MoMA va a exhibir piezas desde {} hasta {}'.format(anhoInicial, anhoFinal))
-        print('Hay {} posibles piezas para un área de {} m^2 '.format(len(rangoObrasRequerido['elements']), areaDisponible))
-        print('La posible exhibición tiene {} piezas'.format(len(nuevaExposicion[0]['elements'])))
-        print('Se ocuparon {} m^2 de los {} m^2 disponibles'.format(nuevaExposicion[1], areaDisponible))
+        print('Hay {} posibles piezas para un área de {} m^2 '.format(lt.size(rangoObrasRequerido), areaDisponible))
+        print('La posible exhibición tiene {} piezas'.format(lt.size(nuevaExposicion)))
+        print('Se ocuparon {} m^2 de los {} m^2 disponibles'.format(round(nuevaExposicion1[1], 2), areaDisponible))
         print('Las primeras 5 obras: ')
-         
-        for i in nuevaExposicion[0]['elements'][:5]:
-            print(i)
-            
+        print('\tTítulo \t |  Artista(s) |    Fecha    |    Clasificación    |    Técnica    |    \t\t Dimensiones    ')  
+        print('==================================================================================================') 
+        cont1 = 0
+        for i in lt.iterator(nuevaExposicion):
+            if cont1 < 5:
+                print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['artista'], i['fecha'], i['clasificacion'], i['tecnica'], i['dimensiones']))
+            cont1 += 1
+        print('')
         print('Las últimas 5 obras: ')
-        
-        for i in nuevaExposicion[0]['elements'][(len(nuevaExposicion[0]['elements']) - 4):]:
-            print(i)
-            
-        print('Toda la exposición completa se muestra a continuación: ')
-        
-        for i in nuevaExposicion[0]['elements']:
-            print(i)        
+        print('\tTítulo \t |  Artista(s) |    Fecha    |    Clasificación    |    Técnica    |    \t\t Dimensiones    ')  
+        print('==================================================================================================')  
+        for i in lt.iterator(ultimas_5):
+            print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['artista'], i['fecha'], i['clasificacion'], i['tecnica'], i['dimensiones']))      
         
         input()
         

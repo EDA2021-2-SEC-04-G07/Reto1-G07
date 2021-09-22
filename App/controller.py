@@ -111,10 +111,11 @@ def llamarObtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista):
     return model.obtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista)
 
 def llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista):
-    return model.crearExposicion(rangoObrasRequerido)
+    return model.crearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista)
 
 def llamarAgregarArtistaPorId(datos, datosArtistas):
     return model.agregarArtistaPorId(datos, datosArtistas)
+
 def llamarDarListaObrasDepartamento(datos, departamento):
     return model.darListaObrasDepartamento(datos, departamento)
 
@@ -126,3 +127,6 @@ def llamarDarPrecioTransporteDepartamento(lista):
 
 def llamarDarPesoTotalDepartamento(lista_obras):
     return model.darPesoTotalDepartamento(lista_obras)
+
+def llamarfiltrarFechasObras(datos):
+    return model.filtrarFechasObras(datos)

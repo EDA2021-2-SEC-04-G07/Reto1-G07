@@ -66,7 +66,7 @@ def agregarArtista(catalogo, artista):
     lt.addLast(catalogo['artistas'], artista)
 
 def agregarObra(catalogo, obra):
-    obra=nuevaObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'], obra['Diameter (cm)'], obra['Length (cm)'])
+    obra=nuevaObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'], obra['Diameter (cm)'], obra['Length (cm)'], obra['Classification'])
     lt.addLast(catalogo['obras'], obra)
 
 # Funciones para creacion de datos
@@ -82,7 +82,7 @@ def nuevoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, gener
     #artista['obras']=lt.newList('ARRAY_LIST')
     return artista
 
-def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea, dimensiones, diametro, largo):
+def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea, dimensiones, diametro, largo, clasificacion):
     
     obra={'id':"", 'objectId':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':"", 'linea_adquisicion':"", 'dimensiones':"", 'diametro':"", 'largo':""}
     obra['id']=id
@@ -99,6 +99,7 @@ def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisic
     obra['dimensiones'] = dimensiones
     obra['diametro']=diametro
     obra['largo']=largo
+    obra['clasificacion'] = clasificacion
     
     return obra
 
@@ -266,52 +267,51 @@ def filtrarObrasPorId(datos, idArtista, tipo_lista):
                 lt.addLast(lista_temp_2, i['tecnica'])
     
     return obrasDelArtista, lista_temp_1, lista_temp_2
+
+
+def filtrarFechasObras(datos):
+    for i in lt.iterator(datos):
+        
+        operadores = (" ", "-")
+        fecha = i['fecha']
+        
+        if not(fecha.isnumeric()):
+            if fecha.count('(') != 0: 
+                if fecha.index("(") == 0 and fecha.index(")") == len(fecha)-1:
+                    fecha = fecha[1:-1] 
+                elif fecha.index("(") == 0: 
+                    fecha = fecha[1:] 
+            if fecha.count('.') != 0:
+                fecha = fecha.replace('.', '')
+            if fecha == 'Unknown':
+                i['fecha'] = 0
+            elif fecha == 'n.d.':
+                i['fecha'] = 0
+            elif fecha.count(" ") == 0:  
+                if '–' in fecha:
+                    fechaLista = fecha.split("–") 
+                elif '-' in fecha:
+                    fechaLista = fecha.split("-") 
+
+                fechaAnho = encontrarAnho(fechaLista)
+                i['fecha'] = fechaAnho[0]
+            else:
+                fechaLista = fecha.split() 
+                fechaAnho = encontrarAnho(fechaLista)
+                i['fecha'] = fechaAnho[0] 
+        
+    return datos
           
     
 def obtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista):
-    
-    info = datos['obras']['elements']
+
     rangoObras = lt.newList(tipo_lista)
     
-    for i in info:
-        if (('before' in i['fecha']) or ('Before' in i['fecha']) or ('December' in i['fecha']) or ('c.' in i['fecha'])):
-            i ['fecha'] = i['fecha'][(len(i['fecha'])-4):] 
-            print(i['fecha'])  
-        elif i['fecha'] == 'Unknown':
-            i['fecha'] = 0   
-            print(i['fecha'])  
-        elif '(November 11-14) 1963' == i['fecha']:
-            i['fecha'] = 1963
-            print(i['fecha']) 
-        elif '(July 30-August 7) 1965' == i['fecha']:
-            i['fecha'] = 1965
-            print(i['fecha']) 
-        elif '(October, 1985)' == i['fecha']:
-            i['fecha'] = 1965
-            print(i['fecha'])
-        elif 'published November 1898' == i['fecha']:
-            i['fecha'] = 1898
-            print(i['fecha'])  
-        elif (('-' in i['fecha']) and ('(' in i['fecha'])):
-            i['fecha'] = i['fecha'][1:(len(i['fecha'])-6)]
-            print(i['fecha']) 
-        elif '-' in i['fecha']:
-            if (i['fecha']).index('-') == 0:
-                i['fecha'] = i['fecha'][1:]
-            else:
-                i['fecha'] = i['fecha'][:4]
-            print(i['fecha'])
-        elif '(newspaper published October 19, 1994 through March 14, 1995)' == i['fecha']:
-            i['fecha'] = 1994
-            print(i['fecha']) 
-        
-        
-                        
+    for i in lt.iterator(datos):
+                           
         if ((int(i['fecha']) <= anhoFinal) and (int(i['fecha']) >= anhoInicial)):
             alturaObra = i['altura']
             anchoObra = i['ancho']
-            
-            print(i['fecha']) 
             
             if alturaObra == "":
                 alturaObra = 0
@@ -339,6 +339,16 @@ def agregarArtistaPorId(datos, datosArtistas):
             
     
 # Funciones utilizadas para comparar elementos dentro de una lista
+
+def encontrarAnho(lista):
+    
+    listaNueva = []
+    for i in lista:
+        if i.isnumeric() and len(i)>3:
+            listaNueva.append(i)
+            
+    return listaNueva
+            
 
 def cmpArtworkByDateAcquired(artwork1, artwork2):
     
@@ -447,14 +457,16 @@ def crearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista):
     info = rangoObrasRequerido['elements']
     nuevaExposicion = lt.newList(tipo_lista)
     
-    while ((areaUsada <= areaDisponible) and (i < (len(rangoObrasRequerido['elements'])))):
+    for i in lt.iterator(rangoObrasRequerido):
         
-        areaUsada += info[i]['areaObra']
-        lt.addLast(nuevaExposicion, info[i])
-        
-        i += 1
+        if areaUsada <= areaDisponible:
+            areaUsada += i['areaObra']
+            lt.addLast(nuevaExposicion, i)
+        else:
+            break
         
     return nuevaExposicion, areaUsada
+        
 
 def calcularCostoTransporteObra(obra):
 
