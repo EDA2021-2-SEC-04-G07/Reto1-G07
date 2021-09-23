@@ -24,6 +24,7 @@ import config as cf
 import sys
 from os import system
 from datetime import date, time, datetime
+import time
 from App import controller
 from DISClib.ADT import list as lt
 assert cf
@@ -281,20 +282,19 @@ while True:
     
     elif int(inputs[0]) == 7:
         
+        tiempo_inicial = time.process_time()
         datos = catalogo.copy()
         anhoInicial = int(input("Digite el año inicial: "))
         anhoFinal = int(input("Digite el año final: "))
         areaDisponible = float(input("Digite el área disponible en m^2: "))
         
-        lista_fechas_modificadas = controller.llamarfiltrarFechasObras(datos['obras'])
+        #lista_fechas_modificadas = controller.llamarfiltrarFechasObras(datos['obras'])
         datosArtistas = catalogo['artistas']
-        rangoObrasRequerido = controller.llamarObtenerRangoObras(lista_fechas_modificadas, anhoInicial, anhoFinal, tipo_lista = 'ARRAY_LIST')
+        rangoObrasRequerido = controller.llamarObtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista = 'ARRAY_LIST')
         nuevaExposicion1 = controller.llamarCrearExposicion(rangoObrasRequerido, areaDisponible, tipo_lista = 'ARRAY_LIST')
         nuevaExposicion = controller.llamarAgregarArtistaPorId(nuevaExposicion1[0], datosArtistas)
         
         ultimas_5 = lt.subList(nuevaExposicion, (lt.size(nuevaExposicion)- 4), 5)
-        
-        print(nuevaExposicion)
         
         print('El MoMA va a exhibir piezas desde {} hasta {}'.format(anhoInicial, anhoFinal))
         print('Hay {} posibles piezas para un área de {} m^2 '.format(lt.size(rangoObrasRequerido), areaDisponible))
@@ -314,7 +314,9 @@ while True:
         print('==================================================================================================')  
         for i in lt.iterator(ultimas_5):
             print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['artista'], i['fecha'], i['clasificacion'], i['tecnica'], i['dimensiones']))      
-        
+        tiempo_final = time.process_time()
+        duracion = (tiempo_final-tiempo_inicial)*1000
+        print('El tiempo de ejecución fue de: ',duracion, ' ms.')
         input()
         system("cls")
         

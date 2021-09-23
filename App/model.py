@@ -268,6 +268,11 @@ def filtrarObrasPorId(datos, idArtista, tipo_lista):
     return obrasDelArtista, lista_temp_1, lista_temp_2
 
 
+def filtrarFechasObras1(datos):
+    
+    for i in lt.iterator(datos):
+        pass
+
 def filtrarFechasObras(datos):
     for i in lt.iterator(datos):
         
@@ -290,7 +295,7 @@ def filtrarFechasObras(datos):
                     fechaLista = fecha.split("–") 
                 elif '-' in fecha:
                     fechaLista = fecha.split("-") 
-
+                fechaLista = fecha.split() 
                 fechaAnho = encontrarAnho(fechaLista)
                 i['fecha'] = fechaAnho[0]
             else:
@@ -305,8 +310,11 @@ def obtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista):
 
     rangoObras = lt.newList(tipo_lista)
     
-    for i in lt.iterator(datos):
-                           
+    for i in lt.iterator(datos['obras']):
+              
+        if i['fecha'] == '':
+            i['fecha'] = 0
+                     
         if ((int(i['fecha']) <= anhoFinal) and (int(i['fecha']) >= anhoInicial)):
             alturaObra = i['altura']
             anchoObra = i['ancho']
