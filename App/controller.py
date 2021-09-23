@@ -46,7 +46,7 @@ def cargarDatos(catalogo):
     cargarObras(catalogo)
 
 def cargarArtistas(catalogo):
-    archivoArtistas=cf.data_dir + 'Artists-utf8-5pct.csv'
+    archivoArtistas=cf.data_dir + 'Artists-utf8-10pct.csv'
     #archivoArtistas='D:\Descargas\Repositorio GitHub\Reto1-G07\Data\Artists-utf8-small.csv'
     input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
     for artista in input_file:
@@ -54,7 +54,7 @@ def cargarArtistas(catalogo):
         model.agregarArtista(catalogo, artista)   
 
 def cargarObras(catalogo):
-    archivoObras=cf.data_dir + 'Artworks-utf8-5pct.csv'
+    archivoObras=cf.data_dir + 'Artworks-utf8-10pct.csv'
     input_file=csv.DictReader(open(archivoObras, encoding='utf8'))
     for obra in input_file:
         model.agregarObra(catalogo, obra)

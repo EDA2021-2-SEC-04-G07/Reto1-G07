@@ -163,6 +163,7 @@ def obrasAdquiridasPorCompra(datos):
 def consultarId(datos, nombreArtista):
     
     info = datos['artistas']
+    idArtista = '0'
     
     for i in lt.iterator(info):
         i['nombre']
