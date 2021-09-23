@@ -108,26 +108,24 @@ def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisic
 def darListaObrasDepartamento(datos, departamento):
 
     lista_obras = lt.newList('ARRAY_LIST')
-    info = datos['obras']['elements']
+    info = datos['obras']
 
-    for i in info:
+    for i in lt.iterator(info):
         if i['departamento'] == departamento:
             lt.addLast(lista_obras, i)
 
     return lista_obras
 
 def darPrecioTransporteDepartamento(lista_obras):
-    lista = lista_obras['elements']
     costo_total=0
-    for i in lista:
+    for i in lt.iterator(lista_obras):
         costo_total = costo_total + calcularCostoTransporteObra(i)
     
     return costo_total
 
 def darPesoTotalDepartamento(lista_obras):
-    lista = lista_obras['elements']
     pesoTotal = 0
-    for i in lista:
+    for i in lt.iterator(lista_obras):
         if not i['peso']:
             pass
         else:
@@ -175,11 +173,11 @@ def consultarId(datos, nombreArtista):
     return idArtista      
 
 def buscarObrasPorNacionalidad(datos, nacionalidad):
-    info_obras = datos['obras']['elements']
+    info_obras = datos['obras']
 
     lista_obras = lt.newList('ARRAY_LIST')    
 
-    for i in info_obras:
+    for i in lt.iterator(info_obras):
 
         x=i['id']
     
@@ -200,10 +198,10 @@ def buscarObrasPorNacionalidad(datos, nacionalidad):
 
 def consultarNacionalidad(datos, id):
 
-    info_artistas = datos['artistas']['elements']
+    info_artistas = datos['artistas']
     nacionalidad = ""
 
-    for i in info_artistas:
+    for i in lt.iterator(info_artistas):
         if i['id'] == str(id):
             nacionalidad = i['nacionalidad']
             break
@@ -212,16 +210,15 @@ def consultarNacionalidad(datos, id):
 
 def listaNacionalidades(datos):
 
-    info_obras = datos['obras']['elements']
+    info_obras = datos['obras']
+    #info_obras = datos['obras']['elements']
 
     lista_id_artistas = lt.newList('ARRAY_LIST')
     dic_nacionalidades = {}
-    
 
-    for i in info_obras:
+    for i in lt.iterator(info_obras):
 
-        x=i['id']
-    
+        x = i['id']
         characters = "[] "
 
         for s in range(len(characters)):
@@ -234,9 +231,9 @@ def listaNacionalidades(datos):
                pass
             else:
                 lt.addLast(lista_id_artistas, a)
-
-    inf=lista_id_artistas['elements']
-    for i in inf:
+    
+    for i in lt.iterator(lista_id_artistas):
+        
         nacionalidad = consultarNacionalidad(datos, int(i))
 
         if nacionalidad in dic_nacionalidades:
@@ -249,6 +246,7 @@ def listaNacionalidades(datos):
     nacionalidades_sort = sorted(dic_nacionalidades.items(), key=operator.itemgetter(1), reverse=True)
     
     return nacionalidades_sort
+
 
 def filtrarObrasPorId(datos, idArtista, tipo_lista):
     
@@ -327,15 +325,42 @@ def obtenerRangoObras(datos, anhoInicial, anhoFinal, tipo_lista):
 def agregarArtistaPorId(datos, datosArtistas):
     
     for i in lt.iterator(datos):   
-        for j in lt.iterator(datosArtistas):
+        if len(i['id']) > 8:
+            i['artista'] = 'Varios'
             
-            if (j['nombre'] != ""):
-                if i['id'][1:-1] == j['id']:
-                    i['artista'] = j['nombre']
-            else:
-                i['artista'] = 'Unknown'
-   
+        else:
+            for j in lt.iterator(datosArtistas): 
+                if (j['nombre'] != ""):
+                    if i['id'][1:-1] == j['id']:
+                        i['artista'] = j['nombre']
+                else:
+                    i['artista'] = 'Unknown'
+                
     return datos
+    
+    #for i in lt.iterator(datos):   
+     #   artistas = []
+      #  for j in lt.iterator(datosArtistas):
+            
+       #     if len(i['id']) > 8:
+        #        lista = (i['id'][1:-1]).split(',')
+         #       print(lista)
+                
+          #      for n in lista:
+           #        if (j['nombre'] != ""):
+            #          if n == j['id']:
+             #               artistas.append(j['nombre'])
+              #  i['artista'] = artistas
+               # break
+            
+            #elif (j['nombre'] != ""):
+             #   if i['id'][1:-1] == j['id']:
+              #      i['artista'] = j['nombre']
+               #     break
+            #else:
+             #   i['artista'] = 'Unknown'
+   
+    #return datos
             
     
 # Funciones utilizadas para comparar elementos dentro de una lista

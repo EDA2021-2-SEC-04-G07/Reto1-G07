@@ -132,7 +132,7 @@ while True:
         dic_con_artista = controller.llamarAgregarArtistaPorId(dic, datosArtistas)
         lista_rango=lt.newList('ARRAY_LIST')
         
-        for elemento in lt.iterator(dic):
+        for elemento in lt.iterator(dic_con_artista):
             if elemento['fecha_adquisicion']=='':
                 pass
             else:
@@ -141,8 +141,8 @@ while True:
                   lt.addLast(lista_rango, elemento)
 
         numero_elementos = lt.size(lista_rango)
-        primeros_3 = lt.subList(dic_con_artista, 1, 3)
-        ultimos_3 = lt.subList(dic_con_artista, (lt.size(dic_con_artista)-4), 3)
+        primeros_3 = lt.subList(lista_rango, 1, 3)
+        ultimos_3 = lt.subList(lista_rango, (lt.size(lista_rango)-4), 3)
         
         print("El número total de obras adquiridas por compra es de : " + str(controller.obrasAdquiridasPorCompra(lista_rango)))
         print('El número de elementos en el rango es: ' + str(numero_elementos))
@@ -211,21 +211,35 @@ while True:
         lista = controller.llamarListaNacionalidades(datos)
         nacionalidad = lista[0][0]
         lista_obras = controller.llamarBuscarObrasPorNacionalidad(datos, nacionalidad)
-        cont = 0          
+        datosArtistas = datos['artistas']
+        lista_obras_con_artistas = controller.llamarAgregarArtistaPorId(lista_obras, datosArtistas)
+        cont = 0   
+        primeras3 = lt.subList(lista_obras_con_artistas, 1, 3) 
+        ultimas3 = lt.subList(lista_obras_con_artistas, (lt.size(lista_obras_con_artistas)- 2), 3) 
+        
+        print(primeras3)     
+        print(ultimas3)
         
         print('La lista de nacionalidades ordenadas por el total de obras de mayor a menor (TOP 10) es :')
         print(' ')
         print(lista[0:10])
         print(' ')
         print(f'Las primeras 3 obras de nacionalidad {nacionalidad}')
-        print(lista_obras['elements'][0])
-        print(lista_obras['elements'][1])
-        print(lista_obras['elements'][2])
+        
+        print('\tTítulo \t |   Artista(s)   |   Fecha de la obra   |    Técnica    |    \t\t Dimensiones    ')  
+        print('==================================================================================================')
+        
+        for i in lt.iterator(primeras3):
+            print('{}\t   {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['artista'], i['fecha'], i['tecnica'], i['dimensiones']))
         print(' ')
         print(f'Las ultimas 3 obras de nacionalidad {nacionalidad}')
-        print(lista_obras['elements'][len(lista_obras['elements'])-1])
-        print(lista_obras['elements'][len(lista_obras['elements'])-2])
-        print(lista_obras['elements'][len(lista_obras['elements'])-3])
+        
+        print('\tTítulo \t |   Artista(s)   |   Fecha de la obra   |    Técnica    |    \t\t Dimensiones    ')  
+        print('==================================================================================================')
+        
+        for i in lt.iterator(ultimas3):
+            print('{}\t   {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['artista'], i['fecha'], i['tecnica'], i['dimensiones']))
+        
         input()
         system("cls")
         
@@ -233,28 +247,35 @@ while True:
         datos = catalogo.copy()
         departamento = input("Escriba el departamento del museo a analizar: ")
         lista_obras_departamento = controller.llamarDarListaObrasDepartamento(datos,departamento)
-        print('El número de obras en el departamento es: ' + str(len(lista_obras_departamento['elements'])))
+        print('El número de obras en el departamento es: ' + str(lt.size(lista_obras_departamento)))
         costo = controller.llamarDarPrecioTransporteDepartamento(lista_obras_departamento)
-        print('El costo de transportar todo el departamento de obras es de: ' + str(costo) + ' USD')
+        print('El costo de transportar todo el departamento de obras es de: ' + str(round(costo, 2)) + ' USD')
         peso_total = controller.llamarDarPesoTotalDepartamento(lista_obras_departamento)
         print('El peso total de las obras del departamento es de: ' + str(peso_total) + 'Kg')
         lista_ordenada = controller.llamarQuicksort(lista_obras_departamento, 3)
+        datosArtistas = datos['artistas']
+        tiempo1 = lista_ordenada[0]
+        lista_final = controller.llamarAgregarArtistaPorId(lista_ordenada[1], datosArtistas)
+        antiguas5 = lt.subList(lista_final, 1, 5)
+        
         print('Las 5 obras mas antiguas son:')
-        print(lista_ordenada[1]['elements'][0])
-        print(lista_ordenada[1]['elements'][1])
-        print(lista_ordenada[1]['elements'][2])
-        print(lista_ordenada[1]['elements'][3])
-        print(lista_ordenada[1]['elements'][4])
+        print('\tTítulo \t |   Artista(s)   |   Clasificación   |    Fecha de la obra   |    Técnica    |  \t\t Dimensiones   | Costo Asociado ')  
+        print('===============================================================================================================')
+        for i in lt.iterator(antiguas5):
+            print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['artista'], i['clasificacion'], i['fecha'], i['tecnica'], i['dimensiones'], i['costo_transporte']))
         print(' ')
-        lista_obras_ordenadas_costo = controller.llamarQuicksort(lista_ordenada[1], 4)
+        lista_obras_ordenadas_costo = controller.llamarQuicksort(lista_final, 4)
+        costosas5 = lt.subList(lista_obras_ordenadas_costo[1], (lt.size(lista_obras_ordenadas_costo[1])- 4), 5)
+        tiempo2 = lista_obras_ordenadas_costo[0]
         print('Las 5 obras mas costosas para transportar son:')
-        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-1])
-        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-2])
-        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-3])
-        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-4])
-        print(lista_obras_ordenadas_costo[1]['elements'][len(lista_obras_ordenadas_costo[1]['elements'])-5])
-
-
+        print('\tTítulo \t |   Artista(s)   |   Clasificación   |    Fecha de la obra   |    Técnica    |  \t\t Dimensiones   | Costo Asociado ')  
+        print('===============================================================================================================')
+        for i in lt.iterator(costosas5):
+            print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['artista'], i['clasificacion'], i['fecha'], i['tecnica'], i['dimensiones'], i['costo_transporte']))
+        print('')
+        tiempo_total = tiempo1 + tiempo2
+        print('El tiempo de ejecución fue de: ',tiempo_total, ' ms.')
+        
         input()
     
     elif int(inputs[0]) == 7:
