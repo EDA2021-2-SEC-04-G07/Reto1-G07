@@ -170,9 +170,10 @@ while True:
         
         datos = catalogo.copy()
         identificador = 2
-        nombreArtista = input('Escriba el nombre del artista a consultar: ')
+        nombreArtista = str(input('Escriba el nombre del artista a consultar: '))
         
-        idArtista = controller.llamarConsultarId(datos, nombreArtista)      
+        idArtista = controller.llamarConsultarId(datos, nombreArtista)  
+        print(idArtista)    
         listaFiltradaPorId = controller.llamarFiltrarObrasPorId(datos, idArtista, tipo_lista = 'ARRAY_LIST')
         print(listaFiltradaPorId)
         listaOrdenadaDeObras = controller.llamarInsertion(listaFiltradaPorId[0], identificador)
@@ -276,6 +277,7 @@ while True:
         print('El tiempo de ejecución fue de: ',tiempo_total, ' ms.')
         
         input()
+        system("cls")
     
     elif int(inputs[0]) == 7:
         
@@ -314,6 +316,7 @@ while True:
             print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['artista'], i['fecha'], i['clasificacion'], i['tecnica'], i['dimensiones']))      
         
         input()
+        system("cls")
         
 
     else:

@@ -162,15 +162,16 @@ def obrasAdquiridasPorCompra(datos):
 
 def consultarId(datos, nombreArtista):
     
-    idArtista = ""
+    info = datos['artistas']
     
-    for i in lt.iterator(datos['artistas']):
-        
+    for i in lt.iterator(info):
+        i['nombre']
         if i['nombre'] == nombreArtista:
             idArtista = i['id']
-            break
+            
+    return idArtista 
         
-    return idArtista      
+         
 
 def buscarObrasPorNacionalidad(datos, nacionalidad):
     info_obras = datos['obras']
@@ -270,7 +271,6 @@ def filtrarObrasPorId(datos, idArtista, tipo_lista):
 def filtrarFechasObras(datos):
     for i in lt.iterator(datos):
         
-        operadores = (" ", "-")
         fecha = i['fecha']
         
         if not(fecha.isnumeric()):
