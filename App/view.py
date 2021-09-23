@@ -125,7 +125,6 @@ while True:
         datos = datos.copy()
         identificador = 3
         resultado = controller.llamarQuicksort(datos, identificador)   
-          
         dic=resultado[1]
         tiempo = resultado[0]
         datosArtistas = catalogo['artistas']
